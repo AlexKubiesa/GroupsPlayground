@@ -1,21 +1,16 @@
 ﻿using System;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Framework
 {
     public abstract class Entity
     {
-        public Entity(Guid id)
-        {
-            Id = id;
-        }
+        protected Entity(Guid id) => Id = id;
 
         public virtual Guid Id { get; }
 
         public override bool Equals(object obj)
         {
-            var other = obj as Entity;
-
-            if (ReferenceEquals(other, null))
+            if (!(obj is Entity other))
                 return false;
 
             if (ReferenceEquals(this, other))

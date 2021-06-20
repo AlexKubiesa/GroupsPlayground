@@ -1,13 +1,11 @@
-﻿namespace GroupsPlayground.Domain
+﻿namespace GroupsPlayground.Domain.Framework
 {
     public abstract class ValueObject<T>
         where T : ValueObject<T>
     {
         public override bool Equals(object obj)
         {
-            var valueObject = obj as T;
-
-            if (ReferenceEquals(valueObject, null))
+            if (!(obj is T valueObject))
                 return false;
 
             return EqualsInternal(valueObject);

@@ -16,12 +16,12 @@ namespace GroupsPlayground.UI
         {
             this.cayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
 
-            GroupElements = cayleyTable.GroupElements.Select(element => new GroupElementViewModel(element)).ToList();
+            GroupElements = cayleyTable.Symbols.Select(element => new CayleyTableSymbolViewModel(element)).ToList();
 
-            Products = cayleyTable.Products.Rows
+            Products = cayleyTable.Products
                 .Select((row, rowIndex) =>
                     row.Select((product, columnIndex) =>
-                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex) { GroupElementSymbol = product?.Symbol })
+                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex) { Symbol = product })
                     .ToList())
                 .ToList();
 
@@ -45,7 +45,7 @@ namespace GroupsPlayground.UI
             }
         }
 
-        public List<GroupElementViewModel> GroupElements { get; }
+        public List<CayleyTableSymbolViewModel> GroupElements { get; }
         public List<List<CayleyTableProductViewModel>> Products { get; }
         public ICommand CheckClosureCommand { get; }
         public ICommand CheckAssociativityCommand { get; }
@@ -54,25 +54,29 @@ namespace GroupsPlayground.UI
 
         private void CheckClosure()
         {
-            bool success = cayleyTable.CheckClosure();
+            var operation = cayleyTable.CreatePartialBinaryOperation();
+            bool success = operation.IsClosed();
             Message = success ? "The group operation is closed." : "The group operation is not closed!";
         }
 
         private void CheckAssociativity()
         {
-            bool success = cayleyTable.CheckAssociativity();
+            var operation = cayleyTable.CreatePartialBinaryOperation();
+            bool success = operation.IsAssociative();
             Message = success ? "The group operation is associative." : "The group operation is not associative!";
         }
 
         private void CheckIdentityElement()
         {
-            bool success = cayleyTable.CheckIdentityElement();
+            var operation = cayleyTable.CreatePartialBinaryOperation();
+            bool success = operation.HasIdentityElement();
             Message = success ? "The group operation has an identity element." : "The group operation does not have an identity element!";
         }
 
         private void CheckInverses()
         {
-            bool success = cayleyTable.CheckInverses();
+            var operation = cayleyTable.CreatePartialBinaryOperation();
+            bool success = operation.HasInverses();
             Message = success ? "All elements have inverses." : "Some elements do not have inverses!";
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
@@ -8,8 +9,8 @@ namespace GroupsPlayground.Domain
     {
         private const int LettersInAlphabet = 26;
 
-        private readonly GroupElement[] groupElements;
-        private readonly CayleyTableProducts products;
+        private readonly Symbol[][] products;
+        private readonly Symbol[] symbols;
 
         public CayleyTable(Guid id, int size) : base(id)
         {
@@ -19,49 +20,29 @@ namespace GroupsPlayground.Domain
             if (size > LettersInAlphabet)
                 throw new ArgumentOutOfRangeException(nameof(size), "Cannot assign symbols to group elements. Cayley table is too large.");
 
-            groupElements = new GroupElement[size];
+            symbols = new Symbol[size];
 
             for (int i = 0; i < size; i++)
             {
                 string symbol = ((char)('a' + i)).ToString();
-                groupElements[i] = new GroupElement(Guid.NewGuid(), symbol);
+                symbols[i] = new Symbol(symbol);
             }
 
-            products = new CayleyTableProducts(groupElements);
+            products = new Symbol[size][];
+
+            for (int i = 0; i < size; i++)
+            {
+                products[i] = new Symbol[size];
+            }
 
             Size = size;
         }
 
         public int Size { get; }
-        public IReadOnlyList<GroupElement> GroupElements => groupElements;
-        public CayleyTableProducts Products => products;
+        public IReadOnlyList<Symbol> Symbols => symbols;
+        public IReadOnlyList<Symbol[]> Products => products;
 
-        public bool CheckFullyDefined() => Products.All(x => x != null);
-
-        public bool CheckClosure() => Products.All(GroupElements.Contains);
-
-        public bool CheckAssociativity() =>
-            CheckFullyDefined() &&
-            CheckClosure() &&
-            GroupElements
-            .SelectMany(first => GroupElements.SelectMany(second => GroupElements.Select(third => (first, second, third))))
-            .All(x => Products[Products[x.first, x.second], x.third] == Products[x.first, Products[x.second, x.third]]);
-
-        public GroupElement IdentityElement() =>
-            GroupElements.FirstOrDefault(candidate =>
-                GroupElements.All(other =>
-                    (Products[candidate, other] == other) && (Products[other, candidate] == other)));
-
-        public bool CheckIdentityElement() => IdentityElement() != null;
-
-        public bool CheckInverses()
-        {
-            var identityElement = IdentityElement();
-            if (identityElement == null)
-                return false;
-            return GroupElements.All(element =>
-                GroupElements.Any(candidate =>
-                    (Products[element, candidate] == identityElement) && (Products[candidate, element] == identityElement)));
-        }
+        public PartialBinaryOperation CreatePartialBinaryOperation() =>
+            new PartialBinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
     }
 }
