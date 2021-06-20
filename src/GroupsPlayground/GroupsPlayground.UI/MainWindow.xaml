@@ -62,10 +62,10 @@
                       ItemsSource="{Binding Products}"/>
         </Grid>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="4" VerticalAlignment="Center">
-            <Button Content="Check closure" Margin="4" MaxWidth="150" Command="{Binding Path=CheckClosureCommand}"/>
-            <Button Content="Check associativity" Margin="4" MaxWidth="150"/>
-            <Button Content="Check identity" Margin="4" MaxWidth="150"/>
-            <Button Content="Check inverses" Margin="4" MaxWidth="150"/>
+            <Button Content="Check closure" Margin="4" MaxWidth="150" Command="{Binding CheckClosureCommand}"/>
+            <Button Content="Check associativity" Margin="4" MaxWidth="150" Command="{Binding CheckAssociativityCommand}"/>
+            <Button Content="Check identity" Margin="4" MaxWidth="150" Command="{Binding CheckIdentityElementCommand}"/>
+            <Button Content="Check inverses" Margin="4" MaxWidth="150" Command="{Binding CheckInversesCommand}"/>
             <TextBlock Text="{Binding Path=Message}" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>

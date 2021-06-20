@@ -18,10 +18,10 @@ namespace GroupsPlayground.UI
 
         public string GroupElementSymbol
         {
-            get => cayleyTable.Products[firstIndex][secondIndex]?.Symbol;
+            get => cayleyTable.Products[firstIndex, secondIndex]?.Symbol;
             set
             {
-                cayleyTable.Products[firstIndex][secondIndex] = (value == null) ? null : new GroupElement(value);
+                cayleyTable.Products[firstIndex, secondIndex] = (value == null) ? null : new GroupElement(value);
                 Notify();
             }
         }
