@@ -20,10 +20,14 @@ namespace GroupsPlayground.UI
 
             Products = cayleyTable.Products.Rows
                 .Select((row, rowIndex) =>
-                    row.Select((element, columnIndex) =>
-                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex) { GroupElementSymbol = element?.Symbol })
+                    row.Select((product, columnIndex) =>
+                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex) { GroupElementSymbol = product?.Symbol })
                     .ToList())
                 .ToList();
+
+            Products.ForEach(row =>
+                row.ForEach(product =>
+                    product.PropertyChanged += (sender, args) => Message = string.Empty));
 
             CheckClosureCommand = new Command(CheckClosure);
             CheckAssociativityCommand = new Command(CheckAssociativity);

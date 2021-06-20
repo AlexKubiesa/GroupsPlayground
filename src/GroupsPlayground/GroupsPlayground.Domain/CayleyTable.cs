@@ -42,6 +42,7 @@ namespace GroupsPlayground.Domain
 
         public bool CheckAssociativity() =>
             CheckFullyDefined() &&
+            CheckClosure() &&
             GroupElements
             .SelectMany(first => GroupElements.SelectMany(second => GroupElements.Select(third => (first, second, third))))
             .All(x => Products[Products[x.first, x.second], x.third] == Products[x.first, Products[x.second, x.third]]);
