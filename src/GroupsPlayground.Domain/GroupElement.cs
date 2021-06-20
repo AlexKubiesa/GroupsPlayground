@@ -2,9 +2,12 @@
 
 namespace GroupsPlayground.Domain
 {
-    public sealed class GroupElement : ValueObject<GroupElement>
+    public sealed class GroupElement : Entity
     {
-        public GroupElement(string symbol)
+        /// <remarks>
+        /// This constructor is internal to prevent group elements from being constructed outside a group or Cayley table.
+        /// </remarks>
+        internal GroupElement(Guid id, string symbol) : base(id)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -15,9 +18,5 @@ namespace GroupsPlayground.Domain
         }
 
         public string Symbol { get; }
-
-        protected override bool EqualsInternal(GroupElement other) => Equals(Symbol, other.Symbol);
-
-        protected override int GetHashCodeInternal() => Symbol?.GetHashCode() ?? 0;
     }
 }

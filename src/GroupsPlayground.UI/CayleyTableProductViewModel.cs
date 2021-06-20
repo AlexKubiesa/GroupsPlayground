@@ -1,5 +1,6 @@
 ﻿using GroupsPlayground.Domain;
 using System;
+using System.Linq;
 
 namespace GroupsPlayground.UI
 {
@@ -21,7 +22,10 @@ namespace GroupsPlayground.UI
             get => cayleyTable.Products[firstIndex, secondIndex]?.Symbol;
             set
             {
-                cayleyTable.Products[firstIndex, secondIndex] = (value == null) ? null : new GroupElement(value);
+                cayleyTable.Products[firstIndex, secondIndex] =
+                    (value == null)
+                        ? null
+                        : cayleyTable.GroupElements.FirstOrDefault(x => x.Symbol == value);
                 Notify();
             }
         }

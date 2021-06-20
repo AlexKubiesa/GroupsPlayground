@@ -24,7 +24,7 @@ namespace GroupsPlayground.Domain
             for (int i = 0; i < size; i++)
             {
                 string symbol = ((char)('a' + i)).ToString();
-                groupElements[i] = new GroupElement(symbol);
+                groupElements[i] = new GroupElement(Guid.NewGuid(), symbol);
             }
 
             products = new CayleyTableProducts(groupElements);

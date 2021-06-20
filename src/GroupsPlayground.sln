@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupsPlayground.Domain", "GroupsPlayground.Domain\GroupsPlayground.Domain.csproj", "{5F8A61C8-985D-4020-BB4D-AEFABAC9F097}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupsPlayground.Domain", "GroupsPlayground.Domain\GroupsPlayground.Domain.csproj", "{5F8A61C8-985D-4020-BB4D-AEFABAC9F097}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupsPlayground.UI", "GroupsPlayground.UI\GroupsPlayground.UI.csproj", "{80EFF32A-498E-4CD5-A971-60C042601D5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupsPlayground.UI", "GroupsPlayground.UI\GroupsPlayground.UI.csproj", "{80EFF32A-498E-4CD5-A971-60C042601D5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
