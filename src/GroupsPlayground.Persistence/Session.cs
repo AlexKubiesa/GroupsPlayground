@@ -21,5 +21,7 @@ namespace GroupsPlayground.Persistence
         }
 
         public void Dispose() => context?.Dispose();
+
+        public void SaveChanges() => context.SaveChanges();
     }
 }

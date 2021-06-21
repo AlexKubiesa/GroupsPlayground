@@ -8,6 +8,7 @@ namespace GroupsPlayground.Domain
 {
     public sealed class Group : Entity
     {
+        // TODO: How to ensure Groups are always valid?
         private readonly PartialBinaryOperation operation;
 
         public Group(Guid id, CayleyTable cayleyTable) : base(id)

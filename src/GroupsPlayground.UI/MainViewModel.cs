@@ -15,9 +15,9 @@ namespace GroupsPlayground.UI
                 session.RegenerateDatabase();
             }
 
-            var viewModel = new GroupSizeViewModel();
-            viewModel.NextClicked += GroupSizeViewModel_NextClicked;
-            CurrentViewModel = viewModel;
+            var first = new GroupSizeViewModel();
+            first.NextClicked += GroupSizeViewModel_NextClicked;
+            CurrentViewModel = first;
         }
 
         private void GroupSizeViewModel_NextClicked(object sender, EventArgs e)
@@ -39,6 +39,9 @@ namespace GroupsPlayground.UI
 
             using var session = new Session();
             session.GroupRepository.AddGroup(group);
+            session.SaveChanges();
+
+            CurrentViewModel = null;
         }
 
         public ViewModel CurrentViewModel

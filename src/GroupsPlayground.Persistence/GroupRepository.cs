@@ -14,10 +14,6 @@ namespace GroupsPlayground.Persistence
 
         public Group GetGroup(Guid id) => context.Groups.Find(id);
 
-        public void AddGroup(Group group)
-        {
-            context.Groups.Add(group);
-            context.SaveChanges();
-        }
+        public void AddGroup(Group group) => context.Groups.Add(group);
     }
 }
