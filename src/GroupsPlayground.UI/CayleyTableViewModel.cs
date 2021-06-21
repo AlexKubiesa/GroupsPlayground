@@ -8,13 +8,11 @@ namespace GroupsPlayground.UI
 {
     public class CayleyTableViewModel : ViewModel
     {
-        private readonly CayleyTable cayleyTable;
-
         private string message = string.Empty;
 
         public CayleyTableViewModel(CayleyTable cayleyTable)
         {
-            this.cayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
+            this.CayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
 
             GroupElements = cayleyTable.Symbols.Select(element => new CayleyTableSymbolViewModel(element)).ToList();
 
@@ -33,7 +31,12 @@ namespace GroupsPlayground.UI
             CheckAssociativityCommand = new Command(CheckAssociativity);
             CheckIdentityElementCommand = new Command(CheckIdentityElement);
             CheckInversesCommand = new Command(CheckInverses);
+            FinishCommand = new Command(Finish);
         }
+
+        public event EventHandler Finished;
+
+        public CayleyTable CayleyTable { get; }
 
         public string Message
         {
@@ -51,10 +54,11 @@ namespace GroupsPlayground.UI
         public ICommand CheckAssociativityCommand { get; }
         public ICommand CheckIdentityElementCommand { get; }
         public ICommand CheckInversesCommand { get; }
+        public ICommand FinishCommand { get; }
 
         private void CheckClosure()
         {
-            var operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.CreatePartialBinaryOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -68,7 +72,7 @@ namespace GroupsPlayground.UI
 
         private void CheckAssociativity()
         {
-            var operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.CreatePartialBinaryOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -88,7 +92,7 @@ namespace GroupsPlayground.UI
 
         private void CheckIdentityElement()
         {
-            var operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.CreatePartialBinaryOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -108,7 +112,7 @@ namespace GroupsPlayground.UI
 
         private void CheckInverses()
         {
-            var operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.CreatePartialBinaryOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -131,6 +135,8 @@ namespace GroupsPlayground.UI
             bool success = operation.HasInverses();
             Message = success ? Messages.Inverses : Messages.MissingInverses;
         }
+
+        private void Finish() => Finished?.Invoke(this, EventArgs.Empty);
 
         private static class Messages
         {

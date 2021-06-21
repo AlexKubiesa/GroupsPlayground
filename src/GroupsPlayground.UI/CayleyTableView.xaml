@@ -66,6 +66,7 @@
             <Button Content="Check identity" Margin="4" MaxWidth="150" Command="{Binding CheckIdentityElementCommand}"/>
             <Button Content="Check inverses" Margin="4" MaxWidth="150" Command="{Binding CheckInversesCommand}"/>
             <TextBlock Text="{Binding Path=Message}" HorizontalAlignment="Center"/>
+            <Button Content="Finish" Margin="4" MaxWidth="150" Command="{Binding FinishCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -17,7 +17,7 @@ namespace GroupsPlayground.Domain.Framework
         }
 
         private static int ComputeHashCode(IEnumerable<T> source) =>
-            HashCode.Combine(source.Select(EqualityComparer<T>.Default.GetHashCode));
+            source.Select(EqualityComparer<T>.Default.GetHashCode).Aggregate(0, System.HashCode.Combine);
 
         protected override bool EqualsInternal(ValueList<T> other) =>
             (Count == other.Count) && this.Zip(other, EqualityComparer<T>.Default.Equals).All(x => x);

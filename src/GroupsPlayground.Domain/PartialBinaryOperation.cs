@@ -4,7 +4,7 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
-    public sealed class PartialBinaryOperation : ValueObject<PartialBinaryOperation>
+    public class PartialBinaryOperation : ValueObject<PartialBinaryOperation>
     {
         private readonly ValueList<Symbol> symbols;
         private readonly ValueList<ValueList<Symbol>> products;
@@ -114,5 +114,7 @@ namespace GroupsPlayground.Domain
         }
 
         public bool HasInverses() => hasInversesLazy.Value;
+
+        public bool IsGroupOperation() => IsClosed() && IsAssociative() && HasIdentityElement() && HasInverses();
     }
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GroupsPlayground.Domain\GroupsPlayground.Domain.csproj" />
+    <ProjectReference Include="..\GroupsPlayground.Persistence\GroupsPlayground.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
