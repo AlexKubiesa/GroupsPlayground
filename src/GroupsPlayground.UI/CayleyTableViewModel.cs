@@ -55,29 +55,94 @@ namespace GroupsPlayground.UI
         private void CheckClosure()
         {
             var operation = cayleyTable.CreatePartialBinaryOperation();
+
+            if (!operation.IsFullyDefined())
+            {
+                Message = Messages.NotFullyDefined;
+                return;
+            }
+
             bool success = operation.IsClosed();
-            Message = success ? "The group operation is closed." : "The group operation is not closed!";
+            Message = success ? Messages.Closed : Messages.NotClosed;
         }
 
         private void CheckAssociativity()
         {
             var operation = cayleyTable.CreatePartialBinaryOperation();
+
+            if (!operation.IsFullyDefined())
+            {
+                Message = Messages.NotFullyDefined;
+                return;
+            }
+
+            if (!operation.IsClosed())
+            {
+                Message = Messages.NotClosed;
+                return;
+            }
+
             bool success = operation.IsAssociative();
-            Message = success ? "The group operation is associative." : "The group operation is not associative!";
+            Message = success ? Messages.Associative : Messages.NotAssociative;
         }
 
         private void CheckIdentityElement()
         {
             var operation = cayleyTable.CreatePartialBinaryOperation();
+
+            if (!operation.IsFullyDefined())
+            {
+                Message = Messages.NotFullyDefined;
+                return;
+            }
+
+            if (!operation.IsClosed())
+            {
+                Message = Messages.NotClosed;
+                return;
+            }
+
             bool success = operation.HasIdentityElement();
-            Message = success ? "The group operation has an identity element." : "The group operation does not have an identity element!";
+            Message = success ? Messages.IdentityElement : Messages.NoIdentityElement;
         }
 
         private void CheckInverses()
         {
             var operation = cayleyTable.CreatePartialBinaryOperation();
+
+            if (!operation.IsFullyDefined())
+            {
+                Message = Messages.NotFullyDefined;
+                return;
+            }
+
+            if (!operation.IsClosed())
+            {
+                Message = Messages.NotClosed;
+                return;
+            }
+
+            if (!operation.HasIdentityElement())
+            {
+                Message = Messages.NoIdentityElement;
+                return;
+            }
+
             bool success = operation.HasInverses();
-            Message = success ? "All elements have inverses." : "Some elements do not have inverses!";
+            Message = success ? Messages.Inverses : Messages.MissingInverses;
+        }
+
+        private static class Messages
+        {
+            public const string NotFullyDefined = "The group operation is not fully defined!";
+            public const string Closed = "The group operation is closed.";
+            public const string NotClosed = "The group operation is not closed!";
+            public const string Associative = "The group operation is associative.";
+            public const string NotAssociative = "The group operation is not associative!";
+            public const string IdentityElement = "There is an identity element.";
+            public const string NoIdentityElement = "There is no identity element!";
+            public const string Inverses = "All elements have inverses.";
+            public const string MissingInverses = "Some elements do not have inverses!";
         }
     }
 }

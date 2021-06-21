@@ -8,11 +8,22 @@ namespace GroupsPlayground.Domain
     {
         private readonly ValueList<Symbol> symbols;
         private readonly ValueList<ValueList<Symbol>> products;
+        private readonly Lazy<bool> isFullyDefinedLazy;
+        private readonly Lazy<bool> isClosedLazy;
+        private readonly Lazy<bool> isAssociativeLazy;
+        private readonly Lazy<Symbol> identityElementLazy;
+        private readonly Lazy<bool> hasInversesLazy;
 
         public PartialBinaryOperation(ValueList<Symbol> symbols, ValueList<ValueList<Symbol>> products)
         {
             this.symbols = symbols ?? throw new ArgumentNullException(nameof(symbols));
             this.products = products ?? throw new ArgumentNullException(nameof(products));
+
+            isFullyDefinedLazy = new Lazy<bool>(IsFullyDefinedImpl);
+            isClosedLazy = new Lazy<bool>(IsClosedImpl);
+            isAssociativeLazy = new Lazy<bool>(IsAssociativeImpl);
+            identityElementLazy = new Lazy<Symbol>(IdentityElementImpl);
+            hasInversesLazy = new Lazy<bool>(HasInversesImpl);
         }
 
         protected override bool EqualsInternal(PartialBinaryOperation other) =>
@@ -37,19 +48,23 @@ namespace GroupsPlayground.Domain
             return products[firstIndex][secondIndex];
         }
 
-        public bool IsTotal() => products.SelectMany(x => x).All(x => x != null);
+        private bool IsFullyDefinedImpl() => products.SelectMany(x => x).All(x => x != null);
 
-        private void EnsureTotal()
+        public bool IsFullyDefined() => isFullyDefinedLazy.Value;
+
+        private void EnsureFullyDefined()
         {
-            if (!IsTotal())
-                throw new InvalidOperationException("Binary operation is not total.");
+            if (!IsFullyDefined())
+                throw new InvalidOperationException("Binary operation is not fully defined!");
         }
 
-        public bool IsClosed()
+        private bool IsClosedImpl()
         {
-            EnsureTotal();   
+            EnsureFullyDefined();   
             return products.SelectMany(x => x).All(symbols.Contains);
         }
+
+        public bool IsClosed() => isClosedLazy.Value;
 
         private void EnsureClosed()
         {
@@ -57,23 +72,27 @@ namespace GroupsPlayground.Domain
                 throw new InvalidOperationException("Binary operation is not closed.");
         }
 
-        public bool IsAssociative()
+        private bool IsAssociativeImpl()
         {
-            // No need to call EnsureTotal, since that's called by EnsureClosed.
+            EnsureFullyDefined();
             EnsureClosed();
             return symbols
                 .SelectMany(first => symbols.SelectMany(second => symbols.Select(third => (first, second, third))))
                 .All(x => Combine(Combine(x.first, x.second), x.third) == Combine(x.first, Combine(x.second, x.third)));
         }
 
-        public Symbol IdentityElement()
+        public bool IsAssociative() => isAssociativeLazy.Value;
+
+        private Symbol IdentityElementImpl()
         {
-            // No need to call EnsureTotal, since that's called by EnsureClosed.
+            EnsureFullyDefined();
             EnsureClosed();
             return symbols.FirstOrDefault(candidate =>
                 symbols.All(other =>
                     (Combine(candidate, other) == other) && (Combine(other, candidate) == other)));
         }
+
+        public Symbol IdentityElement() => identityElementLazy.Value;
 
         public bool HasIdentityElement() => IdentityElement() != null;
 
@@ -83,14 +102,17 @@ namespace GroupsPlayground.Domain
                 throw new InvalidOperationException("Binary operation has no identity element.");
         }
 
-        public bool HasInverses()
+        private bool HasInversesImpl()
         {
-            // No need to call EnsureTotal or EnsureClosed, since we call EnsureIdentityElement.
+            EnsureFullyDefined();
+            EnsureClosed();
             EnsureIdentityElement();
             var identityElement = IdentityElement();
             return symbols.All(element =>
                 symbols.Any(candidate =>
                     (Combine(element, candidate) == identityElement) && (Combine(candidate, element) == identityElement)));
         }
+
+        public bool HasInverses() => hasInversesLazy.Value;
     }
 }
