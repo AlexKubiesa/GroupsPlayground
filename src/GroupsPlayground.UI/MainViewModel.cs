@@ -12,7 +12,7 @@ namespace GroupsPlayground.UI
         {
             using (var session = new Session())
             {
-                session.CreateDatabase();
+                session.RegenerateDatabase();
             }
 
             var viewModel = new GroupSizeViewModel();

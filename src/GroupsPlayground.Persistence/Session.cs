@@ -14,7 +14,11 @@ namespace GroupsPlayground.Persistence
 
         public GroupRepository GroupRepository { get; }
 
-        public void CreateDatabase() => context.Database.EnsureCreated();
+        public void RegenerateDatabase()
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
 
         public void Dispose() => context?.Dispose();
     }

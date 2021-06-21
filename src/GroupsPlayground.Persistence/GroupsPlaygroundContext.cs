@@ -1,5 +1,6 @@
 ﻿using System;
 using GroupsPlayground.Domain;
+using GroupsPlayground.Domain.Framework;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroupsPlayground.Persistence
@@ -14,6 +15,16 @@ namespace GroupsPlayground.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Group>().HasKey(x => x.Id);
+            modelBuilder.Entity<Group>().HasMany(group => group.Elements).WithOne();
+            modelBuilder.Entity<Group>().HasMany(group => group.Products).WithOne();
+
+            modelBuilder.Entity<GroupElement>().HasKey(x => x.Id);
+            modelBuilder.Entity<GroupElement>().Property(x => x.Symbol);
+
+            modelBuilder.Entity<GroupElementProduct>().HasKey(x => x.Id);
+            modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.First).WithMany();
+            modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.Second).WithMany();
+            modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.Product).WithMany();
         }
     }
 }
