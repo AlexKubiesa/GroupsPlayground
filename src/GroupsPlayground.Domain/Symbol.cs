@@ -3,7 +3,7 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
-    // TODO: Do we need a Symbol class separate from GroupElement?
+    // TODO: Can we consolidate Symbol and GroupElement?
     public sealed class Symbol : ValueObject<Symbol>
     {
         public static Symbol Create(string value) => (value == null) ? null : new Symbol(value);

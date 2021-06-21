@@ -8,15 +8,16 @@ namespace GroupsPlayground.Domain
 {
     public sealed class Group : Entity
     {
-        // TODO: How to ensure Groups are always valid?
-        private readonly PartialBinaryOperation operation;
+        private Group(Guid id) : base(id)
+        {
+        }
 
-        public Group(Guid id, CayleyTable cayleyTable) : base(id)
+        public Group(Guid id, CayleyTable cayleyTable) : this(id)
         {
             if (cayleyTable == null)
                 throw new ArgumentNullException(nameof(cayleyTable));
 
-            operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = cayleyTable.CreatePartialBinaryOperation();
 
             if (!operation.IsGroupOperation())
                 throw new ArgumentOutOfRangeException(nameof(cayleyTable),
@@ -26,22 +27,17 @@ namespace GroupsPlayground.Domain
             Products = cayleyTable.Products
                 .SelectMany((row, rowIndex) =>
                     row.Select((product, columnIndex) =>
-                            new GroupElementProduct(Guid.NewGuid())
-                            {
-                                First = Elements[rowIndex],
-                                Second = Elements[columnIndex],
-                                Product = Elements.Single(x => x.Symbol == product.Value)
-                            })
+                            new GroupElementProduct(
+                                Guid.NewGuid(),
+                                Elements[rowIndex],
+                                Elements[columnIndex],
+                                Elements.Single(x => x.Symbol == product.Value)))
                         .ToList())
                 .ToList();
         }
 
-        public Group(Guid id) : base(id)
-        {
-        }
+        public IReadOnlyList<GroupElement> Elements { get; }
 
-        public IList<GroupElement> Elements { get; }
-
-        public ICollection<GroupElementProduct> Products { get; }
+        public IReadOnlyCollection<GroupElementProduct> Products { get; }
     }
 }

@@ -5,12 +5,20 @@ namespace GroupsPlayground.Domain
 {
     public class GroupElementProduct : Entity
     {
-        public GroupElementProduct(Guid id) : base(id)
+        private GroupElementProduct(Guid id) : base(id)
         {
         }
 
-        public GroupElement First { get; set; }
-        public GroupElement Second { get; set; }
-        public GroupElement Product { get; set; }
+        public GroupElementProduct(Guid id, GroupElement first, GroupElement second, GroupElement product)
+            : this(id)
+        {
+            First = first ?? throw new ArgumentNullException(nameof(first));
+            Second = second ?? throw new ArgumentNullException(nameof(second));
+            Product = product ?? throw new ArgumentNullException(nameof(product));
+        }
+
+        public GroupElement First { get; }
+        public GroupElement Second { get; }
+        public GroupElement Product { get; }
     }
 }
