@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:GroupsPlayground.UI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type local:GroupSizeViewModel}">
+            <local:GroupSizeView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
