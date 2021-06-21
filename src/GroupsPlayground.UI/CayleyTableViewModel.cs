@@ -14,12 +14,12 @@ namespace GroupsPlayground.UI
         {
             this.CayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
 
-            GroupElements = cayleyTable.Symbols.Select(element => new CayleyTableSymbolViewModel(element)).ToList();
+            GroupElements = cayleyTable.GroupElements.Select(element => new CayleyTableGroupElementViewModel(element)).ToList();
 
             Products = cayleyTable.Products
                 .Select((row, rowIndex) =>
                     row.Select((product, columnIndex) =>
-                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex) { Symbol = product })
+                        new CayleyTableProductViewModel(cayleyTable, rowIndex, columnIndex))
                     .ToList())
                 .ToList();
 
@@ -48,7 +48,7 @@ namespace GroupsPlayground.UI
             }
         }
 
-        public List<CayleyTableSymbolViewModel> GroupElements { get; }
+        public List<CayleyTableGroupElementViewModel> GroupElements { get; }
         public List<List<CayleyTableProductViewModel>> Products { get; }
         public ICommand CheckClosureCommand { get; }
         public ICommand CheckAssociativityCommand { get; }

@@ -7,7 +7,9 @@ namespace GroupsPlayground.Domain
     {
         public GroupElement(Guid id, string symbol) : base(id)
         {
-            Symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(symbol));
+            Symbol = symbol;
         }
 
         public string Symbol { get; }

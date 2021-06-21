@@ -23,7 +23,7 @@ namespace GroupsPlayground.Domain
                 throw new ArgumentOutOfRangeException(nameof(cayleyTable),
                     "The operation defined by the Cayley table is not a group operation.");
 
-            Elements = cayleyTable.Symbols.Select(x => new GroupElement(Guid.NewGuid(), x.Value)).ToList();
+            Elements = cayleyTable.GroupElements;
             Products = cayleyTable.Products
                 .SelectMany((row, rowIndex) =>
                     row.Select((product, columnIndex) =>
@@ -31,7 +31,7 @@ namespace GroupsPlayground.Domain
                                 Guid.NewGuid(),
                                 Elements[rowIndex],
                                 Elements[columnIndex],
-                                Elements.Single(x => x.Symbol == product.Value)))
+                                Elements.Single(x => x.Symbol == product.Symbol)))
                         .ToList())
                 .ToList();
         }

@@ -9,8 +9,8 @@ namespace GroupsPlayground.Domain
     {
         private const int LettersInAlphabet = 26;
 
-        private readonly Symbol[][] products;
-        private readonly Symbol[] symbols;
+        private readonly GroupElement[] groupElements;
+        private readonly GroupElement[][] products;
 
         public CayleyTable(Guid id, int size) : base(id)
         {
@@ -20,29 +20,29 @@ namespace GroupsPlayground.Domain
             if (size > LettersInAlphabet)
                 throw new ArgumentOutOfRangeException(nameof(size), "Cannot assign symbols to group elements. Cayley table is too large.");
 
-            symbols = new Symbol[size];
+            groupElements = new GroupElement[size];
 
             for (int i = 0; i < size; i++)
             {
                 string symbol = ((char)('a' + i)).ToString();
-                symbols[i] = new Symbol(symbol);
+                groupElements[i] = new GroupElement(Guid.NewGuid(), symbol);
             }
 
-            products = new Symbol[size][];
+            products = new GroupElement[size][];
 
             for (int i = 0; i < size; i++)
             {
-                products[i] = new Symbol[size];
+                products[i] = new GroupElement[size];
             }
 
             Size = size;
         }
 
         public int Size { get; }
-        public IReadOnlyList<Symbol> Symbols => symbols;
-        public IReadOnlyList<Symbol[]> Products => products;
+        public IReadOnlyList<GroupElement> GroupElements => groupElements;
+        public IReadOnlyList<GroupElement[]> Products => products;
 
         public PartialBinaryOperation CreatePartialBinaryOperation() =>
-            new PartialBinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
+            new PartialBinaryOperation(groupElements.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
     }
 }
