@@ -12,10 +12,10 @@ namespace GroupsPlayground.UI
 
         public CayleyTableViewModel(string groupName, CayleyTable cayleyTable)
         {
-            this.GroupName = groupName;
+            GroupName = groupName;
             CayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
 
-            GroupElements = cayleyTable.GroupElements.Select(element => new CayleyTableGroupElementViewModel(element)).ToList();
+            GroupElements = cayleyTable.Symbols.Select(element => new CayleyTableSymbolViewModel(element)).ToList();
 
             Products = cayleyTable.Products
                 .Select((row, rowIndex) =>
@@ -50,7 +50,7 @@ namespace GroupsPlayground.UI
             }
         }
 
-        public List<CayleyTableGroupElementViewModel> GroupElements { get; }
+        public List<CayleyTableSymbolViewModel> GroupElements { get; }
         public List<List<CayleyTableProductViewModel>> Products { get; }
         public ICommand CheckClosureCommand { get; }
         public ICommand CheckAssociativityCommand { get; }

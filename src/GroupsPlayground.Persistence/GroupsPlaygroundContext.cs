@@ -2,6 +2,7 @@
 using GroupsPlayground.Domain;
 using GroupsPlayground.Domain.Framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace GroupsPlayground.Persistence
 {
@@ -10,10 +11,13 @@ namespace GroupsPlayground.Persistence
         public DbSet<Group> Groups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseSqlServer(@"Server=(LocalDb)\GroupsPlayground; Integrated Security=true; Database=GroupsPlayground; AttachDbFilename=C:\Temp\GroupsPlayground.mdf");
+            optionsBuilder.UseSqlServer(
+                @"Server=(LocalDb)\GroupsPlayground; Integrated Security=true; Database=GroupsPlayground; AttachDbFilename=C:\Temp\GroupsPlayground.mdf");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseValueConverter(new SymbolToStringConverter());
+
             modelBuilder.Entity<Group>().HasKey(x => x.Id);
             modelBuilder.Entity<Group>().HasMany(group => group.Elements).WithOne();
             modelBuilder.Entity<Group>().HasMany(group => group.Products).WithOne();

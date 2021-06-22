@@ -17,13 +17,12 @@ namespace GroupsPlayground.UI
             this.secondIndex = secondIndex;
         }
 
-        public string Product
+        public Symbol Product
         {
-            get => cayleyTable.Products[firstIndex][secondIndex]?.Symbol;
+            get => cayleyTable.Products[firstIndex][secondIndex];
             set
             {
-                var productElement = cayleyTable.GetGroupElement(value);
-                cayleyTable.Products[firstIndex][secondIndex] = productElement;
+                cayleyTable.Products[firstIndex][secondIndex] = value;
                 Notify();
             }
         }

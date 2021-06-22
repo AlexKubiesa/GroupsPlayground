@@ -6,42 +6,42 @@ namespace GroupsPlayground.Domain
 {
     public class PartialBinaryOperation : ValueObject<PartialBinaryOperation>
     {
-        private readonly ValueList<GroupElement> groupElements;
-        private readonly ValueList<ValueList<GroupElement>> products;
+        private readonly ValueList<Symbol> elements;
+        private readonly ValueList<ValueList<Symbol>> products;
         private readonly Lazy<bool> isFullyDefinedLazy;
         private readonly Lazy<bool> isClosedLazy;
         private readonly Lazy<bool> isAssociativeLazy;
-        private readonly Lazy<GroupElement> identityElementLazy;
+        private readonly Lazy<Symbol> identityElementLazy;
         private readonly Lazy<bool> hasInversesLazy;
 
-        public PartialBinaryOperation(ValueList<GroupElement> groupElements, ValueList<ValueList<GroupElement>> products)
+        public PartialBinaryOperation(ValueList<Symbol> elements, ValueList<ValueList<Symbol>> products)
         {
-            this.groupElements = groupElements ?? throw new ArgumentNullException(nameof(groupElements));
+            this.elements = elements ?? throw new ArgumentNullException(nameof(elements));
             this.products = products ?? throw new ArgumentNullException(nameof(products));
 
             isFullyDefinedLazy = new Lazy<bool>(IsFullyDefinedImpl);
             isClosedLazy = new Lazy<bool>(IsClosedImpl);
             isAssociativeLazy = new Lazy<bool>(IsAssociativeImpl);
-            identityElementLazy = new Lazy<GroupElement>(IdentityElementImpl);
+            identityElementLazy = new Lazy<Symbol>(IdentityElementImpl);
             hasInversesLazy = new Lazy<bool>(HasInversesImpl);
         }
 
         protected override bool EqualsInternal(PartialBinaryOperation other) =>
-            groupElements.Equals(other.groupElements) && products.Equals(other.products);
+            elements.Equals(other.elements) && products.Equals(other.products);
 
         protected override int GetHashCodeInternal() =>
-            HashCode.Combine(groupElements.GetHashCode(), products.GetHashCode());
+            HashCode.Combine(elements.GetHashCode(), products.GetHashCode());
 
-        public GroupElement Combine(GroupElement first, GroupElement second)
+        public Symbol Combine(Symbol first, Symbol second)
         {
             if (first == null || second == null)
                 return null;
 
-            int firstIndex = groupElements.IndexOf(first);
+            int firstIndex = elements.IndexOf(first);
             if (firstIndex < 0)
                 return null;
 
-            int secondIndex = groupElements.IndexOf(second);
+            int secondIndex = elements.IndexOf(second);
             if (secondIndex < 0)
                 return null;
 
@@ -61,7 +61,7 @@ namespace GroupsPlayground.Domain
         private bool IsClosedImpl()
         {
             EnsureFullyDefined();   
-            return products.SelectMany(x => x).All(groupElements.Contains);
+            return products.SelectMany(x => x).All(elements.Contains);
         }
 
         public bool IsClosed() => isClosedLazy.Value;
@@ -76,23 +76,23 @@ namespace GroupsPlayground.Domain
         {
             EnsureFullyDefined();
             EnsureClosed();
-            return groupElements
-                .SelectMany(first => groupElements.SelectMany(second => groupElements.Select(third => (first, second, third))))
+            return elements
+                .SelectMany(first => elements.SelectMany(second => elements.Select(third => (first, second, third))))
                 .All(x => Combine(Combine(x.first, x.second), x.third) == Combine(x.first, Combine(x.second, x.third)));
         }
 
         public bool IsAssociative() => isAssociativeLazy.Value;
 
-        private GroupElement IdentityElementImpl()
+        private Symbol IdentityElementImpl()
         {
             EnsureFullyDefined();
             EnsureClosed();
-            return groupElements.FirstOrDefault(candidate =>
-                groupElements.All(other =>
+            return elements.FirstOrDefault(candidate =>
+                elements.All(other =>
                     (Combine(candidate, other) == other) && (Combine(other, candidate) == other)));
         }
 
-        public GroupElement IdentityElement() => identityElementLazy.Value;
+        public Symbol IdentityElement() => identityElementLazy.Value;
 
         public bool HasIdentityElement() => IdentityElement() != null;
 
@@ -108,8 +108,8 @@ namespace GroupsPlayground.Domain
             EnsureClosed();
             EnsureIdentityElement();
             var identityElement = IdentityElement();
-            return groupElements.All(element =>
-                groupElements.Any(candidate =>
+            return elements.All(element =>
+                elements.Any(candidate =>
                     (Combine(element, candidate) == identityElement) && (Combine(candidate, element) == identityElement)));
         }
 

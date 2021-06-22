@@ -5,13 +5,11 @@ namespace GroupsPlayground.Domain
 {
     public class GroupElement : Entity
     {
-        public GroupElement(Guid id, string symbol) : base(id)
+        public GroupElement(Guid id, Symbol symbol) : base(id)
         {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(symbol));
-            Symbol = symbol;
+            Symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
         }
 
-        public string Symbol { get; }
+        public Symbol Symbol { get; }
     }
 }

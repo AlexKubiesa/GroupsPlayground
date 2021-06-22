@@ -5,12 +5,12 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
-    public sealed class CayleyTable : Entity
+    public sealed class CayleyTable : AggregateRoot
     {
         private const int LettersInAlphabet = 26;
 
-        private readonly GroupElement[] groupElements;
-        private readonly GroupElement[][] products;
+        private readonly Symbol[] symbols;
+        private readonly Symbol[][] products;
 
         public CayleyTable(Guid id, int size) : base(id)
         {
@@ -20,37 +20,29 @@ namespace GroupsPlayground.Domain
             if (size > LettersInAlphabet)
                 throw new ArgumentOutOfRangeException(nameof(size), "Cannot assign symbols to group elements. Cayley table is too large.");
 
-            groupElements = new GroupElement[size];
+            symbols = new Symbol[size];
 
             for (int i = 0; i < size; i++)
             {
                 string symbol = ((char)('a' + i)).ToString();
-                groupElements[i] = new GroupElement(Guid.NewGuid(), symbol);
+                symbols[i] = new Symbol(symbol);
             }
 
-            products = new GroupElement[size][];
+            products = new Symbol[size][];
 
             for (int i = 0; i < size; i++)
             {
-                products[i] = new GroupElement[size];
+                products[i] = new Symbol[size];
             }
 
             Size = size;
         }
 
         public int Size { get; }
-        public IReadOnlyList<GroupElement> GroupElements => groupElements;
-        public IReadOnlyList<GroupElement[]> Products => products;
-
-        public GroupElement GetGroupElement(string symbol)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                return null;
-            return GroupElements.SingleOrDefault(x => x.Symbol == symbol)
-                   ?? new GroupElement(Guid.NewGuid(), symbol);
-        }
+        public IReadOnlyList<Symbol> Symbols => symbols;
+        public IReadOnlyList<Symbol[]> Products => products;
 
         public PartialBinaryOperation GetOperation() =>
-            new PartialBinaryOperation(groupElements.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
+            new PartialBinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
     }
 }
