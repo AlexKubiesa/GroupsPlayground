@@ -16,6 +16,10 @@ namespace GroupsPlayground.Domain.Framework
             hashCode = ComputeHashCode(inner);
         }
 
+        public ValueList(params T[] inner) : this((IReadOnlyList<T>)inner)
+        {
+        }
+
         private static int ComputeHashCode(IEnumerable<T> source) =>
             source.Select(EqualityComparer<T>.Default.GetHashCode).Aggregate(0, System.HashCode.Combine);
 

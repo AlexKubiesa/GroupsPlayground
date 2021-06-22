@@ -8,7 +8,7 @@ namespace GroupsPlayground.Domain
     {
         public sealed class Compliance : ValueObject<Compliance>
         {
-            internal Compliance(bool isClosed, bool isAssociative, bool hasIdentity, bool hasInverses)
+            public Compliance(bool isClosed, bool isAssociative, bool hasIdentity, bool hasInverses)
             {
                 IsClosed = isClosed;
                 IsAssociative = isAssociative;
@@ -62,11 +62,9 @@ namespace GroupsPlayground.Domain
                     == operation.Combine(x.first, operation.Combine(x.second, x.third)));
 
         private static Symbol Identity(BinaryOperation operation, bool isClosed) =>
-            isClosed
-                ? operation.Domain.FirstOrDefault(candidate => 
-                    operation.Domain.All(other => 
-                        (operation.Combine(candidate, other) == other) && (operation.Combine(other, candidate) == other)))
-                : null;
+            operation.Domain.FirstOrDefault(candidate =>
+                operation.Domain.All(other =>
+                    (operation.Combine(candidate, other) == other) && (operation.Combine(other, candidate) == other)));
 
         private static bool HasInverses(BinaryOperation operation, Symbol identity) =>
             (identity != null)
