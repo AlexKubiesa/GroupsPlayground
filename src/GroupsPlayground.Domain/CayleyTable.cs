@@ -42,7 +42,15 @@ namespace GroupsPlayground.Domain
         public IReadOnlyList<GroupElement> GroupElements => groupElements;
         public IReadOnlyList<GroupElement[]> Products => products;
 
-        public PartialBinaryOperation CreatePartialBinaryOperation() =>
+        public GroupElement GetGroupElement(string symbol)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                return null;
+            return GroupElements.SingleOrDefault(x => x.Symbol == symbol)
+                   ?? new GroupElement(Guid.NewGuid(), symbol);
+        }
+
+        public PartialBinaryOperation GetOperation() =>
             new PartialBinaryOperation(groupElements.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
     }
 }

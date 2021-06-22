@@ -58,7 +58,7 @@ namespace GroupsPlayground.UI
 
         private void CheckClosure()
         {
-            var operation = CayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.GetOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -72,7 +72,7 @@ namespace GroupsPlayground.UI
 
         private void CheckAssociativity()
         {
-            var operation = CayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.GetOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -92,7 +92,7 @@ namespace GroupsPlayground.UI
 
         private void CheckIdentityElement()
         {
-            var operation = CayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.GetOperation();
 
             if (!operation.IsFullyDefined())
             {
@@ -112,7 +112,7 @@ namespace GroupsPlayground.UI
 
         private void CheckInverses()
         {
-            var operation = CayleyTable.CreatePartialBinaryOperation();
+            var operation = CayleyTable.GetOperation();
 
             if (!operation.IsFullyDefined())
             {

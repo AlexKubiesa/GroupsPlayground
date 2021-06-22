@@ -17,7 +17,7 @@ namespace GroupsPlayground.Domain
             if (cayleyTable == null)
                 throw new ArgumentNullException(nameof(cayleyTable));
 
-            var operation = cayleyTable.CreatePartialBinaryOperation();
+            var operation = cayleyTable.GetOperation();
 
             if (!operation.IsGroupOperation())
                 throw new ArgumentOutOfRangeException(nameof(cayleyTable),

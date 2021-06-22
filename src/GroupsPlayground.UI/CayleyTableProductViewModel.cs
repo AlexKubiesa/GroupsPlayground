@@ -22,11 +22,7 @@ namespace GroupsPlayground.UI
             get => cayleyTable.Products[firstIndex][secondIndex]?.Symbol;
             set
             {
-                var productElement =
-                    (string.IsNullOrWhiteSpace(value))
-                        ? null
-                        : (cayleyTable.GroupElements.SingleOrDefault(x => x.Symbol == value) 
-                           ?? new GroupElement(Guid.NewGuid(), value));
+                var productElement = cayleyTable.GetGroupElement(value);
                 cayleyTable.Products[firstIndex][secondIndex] = productElement;
                 Notify();
             }
