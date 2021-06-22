@@ -10,7 +10,10 @@
              d:Background="White" d:DataContext="{d:DesignInstance local:GroupLibraryViewModel}">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type domain:Group}">
-            <TextBlock Text="{Binding Name}"/>
+            <StackPanel>
+                <TextBlock Text="{Binding Name}" FontSize="20" Margin="4"/>
+                <TextBlock Text="{Binding Elements.Count, StringFormat='Size: {0}'}" Margin="4"/>
+            </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel MaxWidth="200">

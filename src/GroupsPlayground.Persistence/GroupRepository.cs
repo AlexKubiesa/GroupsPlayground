@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GroupsPlayground.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroupsPlayground.Persistence
 {
@@ -15,7 +17,16 @@ namespace GroupsPlayground.Persistence
 
         public Group GetGroup(Guid id) => context.Groups.Find(id);
 
-        public IEnumerable<Group> GetAllGroups() => context.Groups;
+        public List<Group> GetAllGroups()
+        {
+            var groups = context.Groups.ToList();
+            if (groups.Count > 0)
+            {
+                context.Entry(groups[0]).Collection(x => x.Elements).Load();
+            }
+
+            return groups;
+        }
 
         public void AddGroup(Group group) => context.Groups.Add(group);
     }
