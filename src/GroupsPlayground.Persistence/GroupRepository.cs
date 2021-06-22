@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GroupsPlayground.Domain;
 
 namespace GroupsPlayground.Persistence
@@ -13,6 +14,8 @@ namespace GroupsPlayground.Persistence
         }
 
         public Group GetGroup(Guid id) => context.Groups.Find(id);
+
+        public IEnumerable<Group> GetAllGroups() => context.Groups;
 
         public void AddGroup(Group group) => context.Groups.Add(group);
     }

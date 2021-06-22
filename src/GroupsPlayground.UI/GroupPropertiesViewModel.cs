@@ -3,16 +3,27 @@ using System.Windows.Input;
 
 namespace GroupsPlayground.UI
 {
-    public class GroupSizeViewModel : ViewModel
+    public class GroupPropertiesViewModel : ViewModel
     {
+        private string groupName;
         private int groupSize;
 
-        public GroupSizeViewModel()
+        public GroupPropertiesViewModel()
         {
             NextCommand = new Command(Next);
         }
 
         public event EventHandler NextClicked;
+
+        public string GroupName
+        {
+            get => groupName;
+            set
+            {
+                groupName = value;
+                Notify();
+            }
+        }
 
         public int GroupSize
         {

@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace GroupsPlayground.UI
 {
     /// <summary>
-    /// Interaction logic for GroupSizeView.xaml
+    /// Interaction logic for GroupLibraryView.xaml
     /// </summary>
-    public partial class GroupSizeView : UserControl
+    public partial class GroupLibraryView : UserControl
     {
-        public GroupSizeView()
+        public GroupLibraryView()
         {
             InitializeComponent();
         }

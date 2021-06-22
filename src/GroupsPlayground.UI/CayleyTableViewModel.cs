@@ -10,9 +10,10 @@ namespace GroupsPlayground.UI
     {
         private string message = string.Empty;
 
-        public CayleyTableViewModel(CayleyTable cayleyTable)
+        public CayleyTableViewModel(string groupName, CayleyTable cayleyTable)
         {
-            this.CayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
+            this.GroupName = groupName;
+            CayleyTable = cayleyTable ?? throw new ArgumentNullException(nameof(cayleyTable));
 
             GroupElements = cayleyTable.GroupElements.Select(element => new CayleyTableGroupElementViewModel(element)).ToList();
 
@@ -36,6 +37,7 @@ namespace GroupsPlayground.UI
 
         public event EventHandler Finished;
 
+        public string GroupName { get; }
         public CayleyTable CayleyTable { get; }
 
         public string Message

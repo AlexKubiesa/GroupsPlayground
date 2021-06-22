@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
@@ -35,6 +34,8 @@ namespace GroupsPlayground.Domain
                         .ToList())
                 .ToList();
         }
+
+        public string Name { get; set; }
 
         public IReadOnlyList<GroupElement> Elements { get; }
 

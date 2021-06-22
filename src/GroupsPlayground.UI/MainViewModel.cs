@@ -10,22 +10,29 @@ namespace GroupsPlayground.UI
 
         public MainViewModel()
         {
-            using (var session = new Session())
-            {
-                session.RegenerateDatabase();
-            }
+            using var session = new Session();
+            session.RegenerateDatabase();
 
-            var first = new GroupSizeViewModel();
-            first.NextClicked += GroupSizeViewModel_NextClicked;
+            var first = new GroupLibraryViewModel();
+            first.CreateGroupClicked += GroupLibraryViewModel_CreateGroupClicked;
             CurrentViewModel = first;
+        }
+
+        private void GroupLibraryViewModel_CreateGroupClicked(object sender, EventArgs e)
+        {
+            if (!(sender is GroupLibraryViewModel viewModel)) return;
+
+            var next = new GroupPropertiesViewModel();
+            next.NextClicked += GroupSizeViewModel_NextClicked;
+            CurrentViewModel = next;
         }
 
         private void GroupSizeViewModel_NextClicked(object sender, EventArgs e)
         {
-            if (!(sender is GroupSizeViewModel viewModel)) return;
+            if (!(sender is GroupPropertiesViewModel viewModel)) return;
 
             var cayleyTable = new CayleyTable(Guid.NewGuid(), viewModel.GroupSize);
-            var next = new CayleyTableViewModel(cayleyTable);
+            var next = new CayleyTableViewModel(viewModel.GroupName, cayleyTable);
             next.Finished += CayleyTableViewModel_Finished;
             CurrentViewModel = next;
         }
@@ -35,13 +42,15 @@ namespace GroupsPlayground.UI
             if (!(sender is CayleyTableViewModel viewModel)) return;
 
             var cayleyTable = viewModel.CayleyTable;
-            var group = new Group(Guid.NewGuid(), cayleyTable);
+            var group = new Group(Guid.NewGuid(), cayleyTable) { Name = viewModel.GroupName };
 
             using var session = new Session();
             session.GroupRepository.AddGroup(group);
             session.SaveChanges();
 
-            CurrentViewModel = null;
+            var next = new GroupLibraryViewModel();
+            next.CreateGroupClicked += GroupLibraryViewModel_CreateGroupClicked;
+            CurrentViewModel = next;
         }
 
         public ViewModel CurrentViewModel
