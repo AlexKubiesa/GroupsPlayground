@@ -17,8 +17,9 @@ namespace GroupsPlayground.Domain
                 throw new ArgumentNullException(nameof(cayleyTable));
 
             var operation = cayleyTable.GetOperation();
+            var compliance = GroupAxioms.CheckCompliance(operation);
 
-            if (!operation.IsGroupOperation())
+            if (!compliance.Success)
                 throw new ArgumentOutOfRangeException(nameof(cayleyTable),
                     "The operation defined by the Cayley table is not a group operation.");
 

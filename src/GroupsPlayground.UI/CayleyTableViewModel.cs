@@ -28,10 +28,7 @@ namespace GroupsPlayground.UI
                 row.ForEach(product =>
                     product.PropertyChanged += (sender, args) => Message = string.Empty));
 
-            CheckClosureCommand = new Command(CheckClosure);
-            CheckAssociativityCommand = new Command(CheckAssociativity);
-            CheckIdentityElementCommand = new Command(CheckIdentityElement);
-            CheckInversesCommand = new Command(CheckInverses);
+            CheckGroupAxiomsCommand = new Command(CheckGroupAxioms);
             FinishCommand = new Command(Finish);
         }
 
@@ -52,13 +49,10 @@ namespace GroupsPlayground.UI
 
         public List<CayleyTableSymbolViewModel> GroupElements { get; }
         public List<List<CayleyTableProductViewModel>> Products { get; }
-        public ICommand CheckClosureCommand { get; }
-        public ICommand CheckAssociativityCommand { get; }
-        public ICommand CheckIdentityElementCommand { get; }
-        public ICommand CheckInversesCommand { get; }
+        public ICommand CheckGroupAxiomsCommand { get; }
         public ICommand FinishCommand { get; }
 
-        private void CheckClosure()
+        private void CheckGroupAxioms()
         {
             var operation = CayleyTable.GetOperation();
 
@@ -68,74 +62,33 @@ namespace GroupsPlayground.UI
                 return;
             }
 
-            bool success = operation.IsClosed();
-            Message = success ? Messages.Closed : Messages.NotClosed;
-        }
+            var compliance = GroupAxioms.CheckCompliance(operation);
 
-        private void CheckAssociativity()
-        {
-            var operation = CayleyTable.GetOperation();
-
-            if (!operation.IsFullyDefined())
-            {
-                Message = Messages.NotFullyDefined;
-                return;
-            }
-
-            if (!operation.IsClosed())
+            if (!compliance.IsClosed)
             {
                 Message = Messages.NotClosed;
                 return;
             }
 
-            bool success = operation.IsAssociative();
-            Message = success ? Messages.Associative : Messages.NotAssociative;
-        }
-
-        private void CheckIdentityElement()
-        {
-            var operation = CayleyTable.GetOperation();
-
-            if (!operation.IsFullyDefined())
+            if (!compliance.IsAssociative)
             {
-                Message = Messages.NotFullyDefined;
+                Message = Messages.NotAssociative;
                 return;
             }
 
-            if (!operation.IsClosed())
-            {
-                Message = Messages.NotClosed;
-                return;
-            }
-
-            bool success = operation.HasIdentityElement();
-            Message = success ? Messages.IdentityElement : Messages.NoIdentityElement;
-        }
-
-        private void CheckInverses()
-        {
-            var operation = CayleyTable.GetOperation();
-
-            if (!operation.IsFullyDefined())
-            {
-                Message = Messages.NotFullyDefined;
-                return;
-            }
-
-            if (!operation.IsClosed())
-            {
-                Message = Messages.NotClosed;
-                return;
-            }
-
-            if (!operation.HasIdentityElement())
+            if (!compliance.HasIdentity)
             {
                 Message = Messages.NoIdentityElement;
                 return;
             }
 
-            bool success = operation.HasInverses();
-            Message = success ? Messages.Inverses : Messages.MissingInverses;
+            if (!compliance.HasInverses)
+            {
+                Message = Messages.MissingInverses;
+                return;
+            }
+
+            Message = Messages.Success;
         }
 
         private void Finish() => Finished?.Invoke(this, EventArgs.Empty);
@@ -151,6 +104,7 @@ namespace GroupsPlayground.UI
             public const string NoIdentityElement = "There is no identity element!";
             public const string Inverses = "All elements have inverses.";
             public const string MissingInverses = "Some elements do not have inverses!";
+            public const string Success = "Success!";
         }
     }
 }

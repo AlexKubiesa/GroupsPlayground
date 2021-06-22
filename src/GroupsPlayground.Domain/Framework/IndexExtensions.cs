@@ -8,7 +8,7 @@ namespace GroupsPlayground.Domain.Framework
 
         public static int IndexOf<T>(this IReadOnlyList<T> list, T item, IEqualityComparer<T> comparer = null)
         {
-            comparer = comparer ?? EqualityComparer<T>.Default;
+            comparer ??= EqualityComparer<T>.Default;
 
             for (int i = 0; i < list.Count; ++i)
             {
