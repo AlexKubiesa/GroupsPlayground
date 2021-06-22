@@ -32,7 +32,7 @@ namespace GroupsPlayground.Domain
                 HashCode.Combine(IsClosed, IsAssociative, HasIdentity, HasInverses);
         }
 
-        public static Compliance CheckCompliance(PartialBinaryOperation operation)
+        public static Compliance CheckCompliance(BinaryOperation operation)
         {
             if (operation == null)
                 throw new ArgumentNullException(nameof(operation));
@@ -48,10 +48,10 @@ namespace GroupsPlayground.Domain
             return new Compliance(isClosed, isAssociative, hasIdentity, hasInverses);
         }
 
-        private static bool IsClosed(PartialBinaryOperation operation) =>
+        private static bool IsClosed(BinaryOperation operation) =>
             operation.Range.All(operation.Domain.Contains);
 
-        private static bool IsAssociative(PartialBinaryOperation operation, bool isClosed) =>
+        private static bool IsAssociative(BinaryOperation operation, bool isClosed) =>
             isClosed
             && operation.Domain
                 .SelectMany(first =>
@@ -61,14 +61,14 @@ namespace GroupsPlayground.Domain
                     operation.Combine(operation.Combine(x.first, x.second), x.third)
                     == operation.Combine(x.first, operation.Combine(x.second, x.third)));
 
-        private static Symbol Identity(PartialBinaryOperation operation, bool isClosed) =>
+        private static Symbol Identity(BinaryOperation operation, bool isClosed) =>
             isClosed
                 ? operation.Domain.FirstOrDefault(candidate => 
                     operation.Domain.All(other => 
                         (operation.Combine(candidate, other) == other) && (operation.Combine(other, candidate) == other)))
                 : null;
 
-        private static bool HasInverses(PartialBinaryOperation operation, Symbol identity) =>
+        private static bool HasInverses(BinaryOperation operation, Symbol identity) =>
             (identity != null)
             && operation.Domain.All(element => 
                 operation.Domain.Any(candidate => 

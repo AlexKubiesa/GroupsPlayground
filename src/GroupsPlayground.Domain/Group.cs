@@ -16,7 +16,7 @@ namespace GroupsPlayground.Domain
             if (cayleyTable == null)
                 throw new ArgumentNullException(nameof(cayleyTable));
 
-            var operation = cayleyTable.GetOperation();
+            var operation = cayleyTable.GetBinaryOperation();
             var compliance = GroupAxioms.CheckCompliance(operation);
 
             if (!compliance.Success)

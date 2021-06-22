@@ -54,7 +54,7 @@ namespace GroupsPlayground.UI
 
         private void CheckGroupAxioms()
         {
-            var operation = CayleyTable.GetOperation();
+            var operation = CayleyTable.GetBinaryOperation();
 
             if (!operation.IsFullyDefined())
             {

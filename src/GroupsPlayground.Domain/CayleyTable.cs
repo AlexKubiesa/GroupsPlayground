@@ -42,7 +42,7 @@ namespace GroupsPlayground.Domain
         public IReadOnlyList<Symbol> Symbols => symbols;
         public IReadOnlyList<Symbol[]> Products => products;
 
-        public PartialBinaryOperation GetOperation() =>
-            new PartialBinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
+        public BinaryOperation GetBinaryOperation() =>
+            new BinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
     }
 }

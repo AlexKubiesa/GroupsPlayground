@@ -14,7 +14,7 @@
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel MaxWidth="200">
-        <ItemsControl ItemsSource="{Binding Groups}"/>
+        <ListBox ItemsSource="{Binding Groups}"/>
         <Button Content="Create new group" Command="{Binding CreateGroupCommand}"/>
     </StackPanel>
 </UserControl>

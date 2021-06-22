@@ -5,19 +5,16 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
-    public class PartialBinaryOperation : ValueObject<PartialBinaryOperation>
+    public class BinaryOperation : ValueObject<BinaryOperation>
     {
         private readonly ValueList<Symbol> domain;
         private readonly ValueList<ValueList<Symbol>> products;
         private readonly HashSet<Symbol> range;
-        private readonly Lazy<bool> isFullyDefinedLazy;
 
-        public PartialBinaryOperation(ValueList<Symbol> domain, ValueList<ValueList<Symbol>> products)
+        public BinaryOperation(ValueList<Symbol> domain, ValueList<ValueList<Symbol>> products)
         {
             this.domain = domain ?? throw new ArgumentNullException(nameof(domain));
             this.products = products ?? throw new ArgumentNullException(nameof(products));
-
-            isFullyDefinedLazy = new Lazy<bool>(IsFullyDefinedImpl);
 
             range = products
                 .SelectMany(x => x)
@@ -28,7 +25,7 @@ namespace GroupsPlayground.Domain
         public IReadOnlyCollection<Symbol> Domain => domain;
         public IReadOnlyCollection<Symbol> Range => range;
 
-        protected override bool EqualsInternal(PartialBinaryOperation other) =>
+        protected override bool EqualsInternal(BinaryOperation other) =>
             domain.Equals(other.domain) && products.Equals(other.products);
 
         protected override int GetHashCodeInternal() =>
@@ -50,8 +47,6 @@ namespace GroupsPlayground.Domain
             return products[firstIndex][secondIndex];
         }
 
-        private bool IsFullyDefinedImpl() => products.SelectMany(x => x).All(x => x != null);
-
-        public bool IsFullyDefined() => isFullyDefinedLazy.Value;
+        public bool IsFullyDefined() => products.SelectMany(x => x).All(x => x != null);
     }
 }
