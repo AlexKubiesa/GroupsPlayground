@@ -2,7 +2,7 @@
 
 namespace GroupsPlayground.UI
 {
-    public sealed class ValidatedPropertyViewModel<T> : ViewModel
+    public class ValidatedPropertyViewModel<T> : ViewModel
     {
         private readonly Func<T, string> validate;
         private T value;
@@ -48,6 +48,13 @@ namespace GroupsPlayground.UI
         {
             Error = validate(Value);
             IsValid = (Error == null);
+        }
+    }
+
+    public sealed class ValidatedPropertyViewModel : ValidatedPropertyViewModel<object>
+    {
+        public ValidatedPropertyViewModel(Func<object, string> validate) : base(validate)
+        {
         }
     }
 }
