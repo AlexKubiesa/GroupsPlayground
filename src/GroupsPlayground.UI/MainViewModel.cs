@@ -42,7 +42,7 @@ namespace GroupsPlayground.UI
             if (!(sender is CayleyTableViewModel viewModel)) return;
 
             var cayleyTable = viewModel.CayleyTable;
-            var group = new Group(Guid.NewGuid(), cayleyTable) { Name = viewModel.GroupName };
+            var group = new Group(Guid.NewGuid(), viewModel.GroupName, cayleyTable);
 
             using var session = new Session();
             session.GroupRepository.AddGroup(group);

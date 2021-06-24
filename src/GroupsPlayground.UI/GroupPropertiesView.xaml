@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GroupsPlayground.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="120" d:DesignWidth="200" d:Background="White" d:DataContext="{d:DesignInstance local:GroupPropertiesViewModel}">
+             d:DesignHeight="200" d:DesignWidth="300" d:Background="White" d:DataContext="{d:DesignInstance local:GroupPropertiesViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,12 +15,14 @@
         <StackPanel Grid.Row="0">
             <TextBlock Margin="4" Text="Group name:"/>
             <TextBox Margin="4" Text="{Binding GroupName}"/>
+            <TextBlock Margin="4" Text="{Binding GroupNameError}"/>
             <TextBlock Margin="4" Text="Group size:"/>
             <TextBox Margin="4" Text="{Binding GroupSize}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Back" Margin="4" Padding="4" IsEnabled="False"/>
-            <Button Content="Next" Margin="4" Padding="4" Command="{Binding NextCommand}"/>
+            <Button Content="Next" Margin="4" Padding="4"
+                    Command="{Binding NextCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

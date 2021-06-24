@@ -7,11 +7,22 @@ namespace GroupsPlayground.Domain
 {
     public sealed class Group : AggregateRoot
     {
-        private Group(Guid id) : base(id)
+        public static string ValidateName(string name) =>
+            name switch
+            {
+                { } valid when valid.All(char.IsLetterOrDigit) => null,
+                var missing when string.IsNullOrEmpty(missing) => "Missing group name.",
+                _ => "Invalid characters in group name."
+            };
+
+        private string name;
+
+        private Group(Guid id, string name) : base(id)
         {
+            Name = name;
         }
 
-        public Group(Guid id, CayleyTable cayleyTable) : this(id)
+        public Group(Guid id, string name, CayleyTable cayleyTable) : this(id, name)
         {
             if (cayleyTable == null)
                 throw new ArgumentNullException(nameof(cayleyTable));
@@ -36,7 +47,17 @@ namespace GroupsPlayground.Domain
                 .ToList();
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => name;
+            set
+            {
+                string error = ValidateName(value);
+                if (error != null)
+                    throw new ArgumentOutOfRangeException(nameof(value), error);
+                name = value;
+            }
+        }
 
         public IReadOnlyList<GroupElement> Elements { get; }
 
