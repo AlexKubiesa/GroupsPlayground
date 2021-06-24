@@ -1,9 +1,28 @@
-﻿namespace GroupsPlayground.UI
+﻿using System;
+
+namespace GroupsPlayground.UI
 {
-    public abstract class ValidatedPropertyViewModel : ViewModel
+    public sealed class ValidatedPropertyViewModel<T> : ViewModel
     {
+        private readonly Func<T, string> validate;
+        private T value;
         private string error;
         private bool isValid;
+
+        public ValidatedPropertyViewModel(Func<T, string> validate)
+        {
+            this.validate = validate ?? throw new ArgumentNullException(nameof(validate));
+        }
+
+        public T Value
+        {
+            get => value;
+            set
+            {
+                this.value = value;
+                Notify();
+            }
+        }
 
         public string Error
         {
@@ -18,18 +37,16 @@
         public bool IsValid
         {
             get => isValid;
-            set
+            private set
             {
                 isValid = value;
                 Notify();
             }
         }
 
-        protected abstract string ValidateInternal();
-
         public void Validate()
         {
-            Error = ValidateInternal();
+            Error = validate(Value);
             IsValid = (Error == null);
         }
     }

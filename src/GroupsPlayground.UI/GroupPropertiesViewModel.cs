@@ -10,15 +10,15 @@ namespace GroupsPlayground.UI
 
         public GroupPropertiesViewModel()
         {
-            GroupName = new GroupNameViewModel();
-            GroupSize = new GroupSizeViewModel();
+            GroupName = new ValidatedPropertyViewModel<string>(Group.ValidateName);
+            GroupSize = new ValidatedPropertyViewModel<int>(CayleyTable.ValidateSize);
             NextCommand = new Command(Next);
         }
 
         public event EventHandler NextClicked;
 
-        public GroupNameViewModel GroupName { get; }
-        public GroupSizeViewModel GroupSize { get; }
+        public ValidatedPropertyViewModel<string> GroupName { get; }
+        public ValidatedPropertyViewModel<int> GroupSize { get; }
 
         public ICommand NextCommand { get; }
 
