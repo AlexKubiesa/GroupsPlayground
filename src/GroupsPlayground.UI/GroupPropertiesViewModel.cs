@@ -6,70 +6,38 @@ namespace GroupsPlayground.UI
 {
     public class GroupPropertiesViewModel : ViewModel
     {
-        private string groupName;
-        private string groupNameError;
-        private int groupSize;
-        private string groupSizeError;
         private bool isValid;
 
         public GroupPropertiesViewModel()
         {
+            GroupName = new GroupNameViewModel();
+            GroupSize = new GroupSizeViewModel();
             NextCommand = new Command(Next);
         }
 
         public event EventHandler NextClicked;
 
-        public string GroupName
-        {
-            get => groupName;
-            set
-            {
-                groupName = value;
-                Notify();
-            }
-        }
+        public GroupNameViewModel GroupName { get; }
+        public GroupSizeViewModel GroupSize { get; }
 
-        public string GroupNameError
-        {
-            get => groupNameError;
-            private set
-            {
-                groupNameError = value;
-                Notify();
-            }
-        }
-
-        public int GroupSize
-        {
-            get => groupSize;
-            set
-            {
-                groupSize = value;
-                Notify();
-            }
-        }
-
-        public string GroupSizeError
-        {
-            get => groupSizeError;
-            private set
-            {
-                groupSizeError = value;
-                Notify();
-            }
-        }
+        public ICommand NextCommand { get; }
 
         public bool IsValid
         {
             get => isValid;
-            set
+            private set
             {
                 isValid = value;
                 Notify();
             }
         }
 
-        public ICommand NextCommand { get; }
+        private void Validate()
+        {
+            GroupName.Validate();
+            GroupSize.Validate();
+            IsValid = GroupName.IsValid && GroupSize.IsValid;
+        }
 
         private void Next()
         {
@@ -78,11 +46,6 @@ namespace GroupsPlayground.UI
                 NextClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void Validate()
-        {
-            GroupNameError = Group.ValidateName(GroupName);
-            GroupSizeError = CayleyTable.ValidateSize(GroupSize);
-            IsValid = (GroupNameError == null) && (GroupSizeError == null);
-        }
+        
     }
 }

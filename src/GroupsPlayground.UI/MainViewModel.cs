@@ -31,8 +31,8 @@ namespace GroupsPlayground.UI
         {
             if (!(sender is GroupPropertiesViewModel viewModel)) return;
 
-            var cayleyTable = new CayleyTable(Guid.NewGuid(), viewModel.GroupSize);
-            var next = new CayleyTableViewModel(viewModel.GroupName, cayleyTable);
+            var cayleyTable = new CayleyTable(Guid.NewGuid(), viewModel.GroupSize.Value);
+            var next = new CayleyTableViewModel(viewModel.GroupName.Value, cayleyTable);
             next.Finished += CayleyTableViewModel_Finished;
             CurrentViewModel = next;
         }

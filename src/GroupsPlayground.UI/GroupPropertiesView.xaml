@@ -14,11 +14,11 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <TextBlock Margin="4" Text="Group name:"/>
-            <TextBox Margin="4" Text="{Binding GroupName}"/>
-            <TextBlock Margin="4" Text="{Binding GroupNameError}"/>
+            <TextBox Margin="4" Text="{Binding GroupName.Value}"/>
+            <TextBlock Margin="4" Text="{Binding GroupName.Error}"/>
             <TextBlock Margin="4" Text="Group size:"/>
-            <TextBox Margin="4" Text="{Binding GroupSize}"/>
-            <TextBlock Margin="4" Text="{Binding GroupSizeError}"/>
+            <TextBox Margin="4" Text="{Binding GroupSize.Value}"/>
+            <TextBlock Margin="4" Text="{Binding GroupSize.Error}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Back" Margin="4" Padding="4" IsEnabled="False"/>
