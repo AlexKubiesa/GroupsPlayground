@@ -18,6 +18,7 @@
             <TextBlock Margin="4" Text="{Binding GroupNameError}"/>
             <TextBlock Margin="4" Text="Group size:"/>
             <TextBox Margin="4" Text="{Binding GroupSize}"/>
+            <TextBlock Margin="4" Text="{Binding GroupSizeError}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Back" Margin="4" Padding="4" IsEnabled="False"/>

@@ -9,6 +9,7 @@ namespace GroupsPlayground.UI
         private string groupName;
         private string groupNameError;
         private int groupSize;
+        private string groupSizeError;
         private bool isValid;
 
         public GroupPropertiesViewModel()
@@ -25,7 +26,6 @@ namespace GroupsPlayground.UI
             {
                 groupName = value;
                 Notify();
-                Validate();
             }
         }
 
@@ -46,7 +46,16 @@ namespace GroupsPlayground.UI
             {
                 groupSize = value;
                 Notify();
-                Validate();
+            }
+        }
+
+        public string GroupSizeError
+        {
+            get => groupSizeError;
+            private set
+            {
+                groupSizeError = value;
+                Notify();
             }
         }
 
@@ -72,7 +81,8 @@ namespace GroupsPlayground.UI
         private void Validate()
         {
             GroupNameError = Group.ValidateName(GroupName);
-            IsValid = (GroupNameError == null);
+            GroupSizeError = CayleyTable.ValidateSize(GroupSize);
+            IsValid = (GroupNameError == null) && (GroupSizeError == null);
         }
     }
 }
