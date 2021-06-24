@@ -13,12 +13,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
-            <TextBlock Margin="4" Text="Group name:"/>
-            <TextBox Margin="4" Text="{Binding GroupName.Value}"/>
-            <TextBlock Margin="4" Text="{Binding GroupName.Error}"/>
-            <TextBlock Margin="4" Text="Group size:"/>
-            <TextBox Margin="4" Text="{Binding GroupSize.Value}"/>
-            <TextBlock Margin="4" Text="{Binding GroupSize.Error}"/>
+            <local:ValidatedPropertyView Margin="4" PropertyLabel="Group name:" DataContext="{Binding GroupName}"/>
+            <local:ValidatedPropertyView Margin="4" PropertyLabel="Group size:" DataContext="{Binding GroupSize}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Back" Margin="4" Padding="4" IsEnabled="False"/>
