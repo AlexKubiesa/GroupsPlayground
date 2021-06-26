@@ -32,7 +32,7 @@
     {
         logger.LogDebug("HandleValidSubmit called.");
         string uri =
-            "/cayleytable"
+            "/groupoperation"
             + QueryString.Create("name", model.Name)
                 .Add("size", model.Size.ToString(CultureInfo.InvariantCulture))
                 .ToUriComponent();

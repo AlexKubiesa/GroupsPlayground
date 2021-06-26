@@ -1,5 +1,27 @@
 ﻿@page "/"
+@using GroupsPlayground.Persistence
+@using GroupsPlayground.Domain
 
 <h1>Library</h1>
 
+<div>
+    <select name="groups" size="5">
+        @foreach (var group in groups)
+        {
+            <option size="20">@group.Name</option>
+        }
+    </select>
+</div>
+
 <button onclick="window.location.href='/groupproperties'">Create new group</button>
+
+@code
+{
+    private List<Group> groups;
+
+    protected override void OnInitialized()
+    {
+        using Session session = new();
+        groups = session.GroupRepository.GetAllGroups();
+    }
+}
