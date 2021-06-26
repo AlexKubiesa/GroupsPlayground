@@ -1,0 +1,41 @@
+﻿@page "/groupproperties"
+
+@using GroupsPlayground.Blazor.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Logging
+@using System.Globalization
+
+@inject ILogger<GroupProperties> logger
+@inject NavigationManager navigationManager
+
+<h1>Group properties</h1>
+
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <p>
+        <label for="name">Name:</label><br />
+        <InputText id="name" @bind-Value="model.Name" /><br />
+    </p>
+    <p>
+        <label for="size">Size:</label><br />
+        <InputNumber id="size" @bind-Value="model.Size"></InputNumber><br />
+    </p>
+    <button type="submit">Next</button><br />
+</EditForm>
+
+@code
+{
+    private readonly GroupPropertiesModel model = new();
+
+    private void HandleValidSubmit()
+    {
+        logger.LogDebug("HandleValidSubmit called.");
+        string uri =
+            "/cayleytable"
+            + QueryString.Create("name", model.Name)
+                .Add("size", model.Size.ToString(CultureInfo.InvariantCulture))
+                .ToUriComponent();
+        navigationManager.NavigateTo(uri);
+    }
+}
