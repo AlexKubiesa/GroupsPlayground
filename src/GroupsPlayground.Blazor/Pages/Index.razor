@@ -8,7 +8,7 @@
     <select name="groups" size="5">
         @foreach (var group in groups)
         {
-            <option size="20">@group.Name</option>
+            <option style="width: 50px">@group.Name (@group.Elements.Count)</option>
         }
     </select>
 </div>
