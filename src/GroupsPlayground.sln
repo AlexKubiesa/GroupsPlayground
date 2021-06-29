@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupsPlayground.Persistenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupsPlayground.Domain.Test", "GroupsPlayground.Domain.Test\GroupsPlayground.Domain.Test.csproj", "{507FBF90-3DA9-4753-8813-60886C5EB2E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupsPlayground.Blazor", "GroupsPlayground.Blazor\GroupsPlayground.Blazor.csproj", "{55F97AA3-0385-47B6-8B79-A74278C0D5F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroupsPlayground.Blazor", "GroupsPlayground.Blazor\GroupsPlayground.Blazor.csproj", "{55F97AA3-0385-47B6-8B79-A74278C0D5F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

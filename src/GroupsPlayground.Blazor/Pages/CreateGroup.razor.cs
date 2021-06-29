@@ -1,15 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using GroupsPlayground.Domain;
 
 namespace GroupsPlayground.Blazor.Pages
 {
+    public class CreateGroupModel
+    {
+    }
+
+    public class GroupPropertiesModel
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [Range(1, 6, ErrorMessage = "Size must be between 1 and 6.")]
+        public int Size { get; set; }
+
+        public bool Submitted { get; set; }
+    }
+
     public class GroupOperationModel
     {
-        public GroupOperationModel(string name, int size)
+        public GroupOperationModel(int elementCount)
         {
-            Name = name;
-            CayleyTable = new CayleyTable(Guid.NewGuid(), size);
+            CayleyTable = new CayleyTable(Guid.NewGuid(), elementCount);
 
             Elements = CayleyTable.Symbols.Select(x => new GroupOperationElementModel(x)).ToArray();
 
@@ -20,9 +38,7 @@ namespace GroupsPlayground.Blazor.Pages
                 .ToArray();
         }
 
-        public string Name { get; }
         public CayleyTable CayleyTable { get; }
-
         public GroupOperationElementModel[] Elements { get; }
         public GroupOperationProductModel[][] Products { get; }
     }

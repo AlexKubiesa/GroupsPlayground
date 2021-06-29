@@ -1,0 +1,91 @@
+﻿@page "/CreateGroup"
+@using GroupsPlayground.Persistence
+@using GroupsPlayground.Domain
+@inject NavigationManager navigationManager
+
+<h1>Create new group</h1>
+
+<div>
+    @if (!groupPropertiesModel.Submitted)
+    {
+        <h3>Group properties</h3>
+
+        <EditForm Model="@groupPropertiesModel" OnValidSubmit="@OnGroupPropertiesSubmitted">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <p>
+                <label for="name">Name:</label><br />
+                <InputText id="name" @bind-Value="groupPropertiesModel.Name" /><br />
+            </p>
+            <p>
+                <label for="size">Size:</label><br />
+                <InputNumber id="size" @bind-Value="groupPropertiesModel.Size"></InputNumber><br />
+            </p>
+            <button type="button" onclick="window.location.href = '/'">Cancel</button>
+            <button type="submit">Next</button><br />
+        </EditForm>
+    }
+    else
+    {
+        <h3>Cayley table</h3>
+
+        <p>Define the group operation by filling in the Cayley table.</p>
+
+        <EditForm Model="@groupOperationModel" OnValidSubmit="@OnGroupOperationSubmitted">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    @foreach (var element in groupOperationModel.Elements)
+                    {
+                        <th>@element.Symbol</th>
+                    }
+                </tr>
+                </thead>
+                <tbody>
+                @for (int rowIndex = 0; rowIndex < groupOperationModel.Elements.Length; rowIndex++)
+                {
+                    var element = groupOperationModel.Elements[rowIndex];
+                    <tr>
+                        <th>@element.Symbol</th>
+                        @for (int columnIndex = 0; columnIndex < groupOperationModel.Elements.Length; columnIndex++)
+                        {
+                            var product = groupOperationModel.Products[rowIndex][columnIndex];
+                            <td><InputText @bind-Value="product.Symbol" /></td>
+                        }
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <button type="button" @onclick="@OnGroupOperationBack">Back</button>
+            <button type="submit">Finish</button>
+        </EditForm>
+    }
+</div>
+
+
+    @code {
+        private GroupPropertiesModel groupPropertiesModel = new();
+        private GroupOperationModel groupOperationModel;
+
+        public void OnGroupPropertiesSubmitted()
+        {
+            groupPropertiesModel.Submitted = true;
+            groupOperationModel = new GroupOperationModel(groupPropertiesModel.Size);
+        }
+
+        public void OnGroupOperationBack()
+        {
+            groupPropertiesModel = new GroupPropertiesModel();
+            groupOperationModel = null;
+        }
+
+        public void OnGroupOperationSubmitted()
+        {
+            using Session session = new();
+            Group group = new(Guid.NewGuid(), groupPropertiesModel.Name, groupOperationModel.CayleyTable);
+            session.GroupRepository.AddGroup(group);
+            session.SaveChanges();
+            navigationManager.NavigateTo("/");
+        }
+    }
