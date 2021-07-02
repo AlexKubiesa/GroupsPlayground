@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GroupsPlayground.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,8 @@ namespace GroupsPlayground.Persistence
         }
 
         public void AddGroup(Group group) => context.Groups.Add(group);
+
+        public async Task AddGroupAsync(Group group) => await context.Groups.AddAsync(group);
 
         public void RemoveGroup(Group group) => context.Groups.Remove(group);
     }

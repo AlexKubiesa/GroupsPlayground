@@ -41,6 +41,7 @@ namespace GroupsPlayground.Blazor.Pages
         public CayleyTable CayleyTable { get; }
         public GroupOperationElementModel[] Elements { get; }
         public GroupOperationProductModel[][] Products { get; }
+        public string ValidationMessage { get; set; }
     }
 
     public class GroupOperationElementModel

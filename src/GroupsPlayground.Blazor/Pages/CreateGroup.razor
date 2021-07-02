@@ -1,6 +1,7 @@
 ﻿@page "/CreateGroup"
 @using GroupsPlayground.Persistence
 @using GroupsPlayground.Domain
+@using System.Text
 @inject NavigationManager navigationManager
 
 <h1>Create new group</h1>
@@ -32,6 +33,9 @@
         <p>Define the group operation by filling in the Cayley table.</p>
 
         <EditForm Model="@groupOperationModel" OnValidSubmit="@OnGroupOperationSubmitted">
+            <p>
+                @groupOperationModel.ValidationMessage
+            </p>
             <table class="table">
                 <thead>
                 <tr>
@@ -51,7 +55,7 @@
                         @for (int columnIndex = 0; columnIndex < groupOperationModel.Elements.Length; columnIndex++)
                         {
                             var product = groupOperationModel.Products[rowIndex][columnIndex];
-                            <td><InputText @bind-Value="product.Symbol" /></td>
+                            <td><InputText @bind-Value="product.Symbol"/></td>
                         }
                     </tr>
                 }
@@ -80,11 +84,44 @@
             groupOperationModel = null;
         }
 
-        public void OnGroupOperationSubmitted()
+        public async Task OnGroupOperationSubmitted()
+        {
+            if (!ValidateCayleyTable())
+                return;
+            await DoCreateGroup();
+        }
+
+        private bool ValidateCayleyTable()
+        {
+            groupOperationModel.ValidationMessage = string.Empty;
+
+            var operation = groupOperationModel.CayleyTable.GetBinaryOperation();
+            if (!operation.IsFullyDefined())
+            {
+                groupOperationModel.ValidationMessage = "The group operation is not fully defined.\n";
+                return false;
+            }
+            
+            var compliance = GroupAxioms.CheckCompliance(operation);
+            var builder = new StringBuilder();
+            if (!compliance.IsClosed)
+                builder.AppendLine("The group operation is not closed.").AppendLine();
+            if (!compliance.IsAssociative)
+                builder.AppendLine("The group operation is not associative.").AppendLine();
+            if (!compliance.HasIdentity)
+                builder.AppendLine("There is no identity element.").AppendLine();
+            if (!compliance.HasInverses)
+                builder.AppendLine("Some elements do not have inverses.").AppendLine();
+            groupOperationModel.ValidationMessage = builder.ToString();
+
+            return compliance.Success;
+        }
+
+        private async Task DoCreateGroup()
         {
             using Session session = new();
             Group group = new(Guid.NewGuid(), groupPropertiesModel.Name, groupOperationModel.CayleyTable);
-            session.GroupRepository.AddGroup(group);
+            await session.GroupRepository.AddGroupAsync(group);
             session.SaveChanges();
             navigationManager.NavigateTo("/");
         }
