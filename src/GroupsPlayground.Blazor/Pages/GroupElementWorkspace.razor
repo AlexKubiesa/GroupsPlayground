@@ -1,11 +1,30 @@
 ﻿@page "/GroupElementWorkspace"
+@using GroupsPlayground.Domain
+@using GroupsPlayground.Persistence
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager navigationManager
 
 <h3>Group element workspace</h3>
 
 <div>
-
+    @(group?.Name)
 </div>
 
 @code {
+    private Group group;
+
+    protected override void OnInitialized()
+    {
+        var query = QueryHelpers.ParseQuery(navigationManager.ToAbsoluteUri(navigationManager.Uri).Query);
+        if (!query.TryGetValue("group", out var idStringValues))
+            return;
+        if (idStringValues.Count != 1)
+            return;
+        string idString = idStringValues.Single();
+        if (!Guid.TryParse(idString, out var id))
+            return;
+        using Session session = new();
+        group = session.GroupRepository.GetGroup(id);
+    }
 
 }

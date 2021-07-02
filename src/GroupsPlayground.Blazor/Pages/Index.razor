@@ -49,6 +49,6 @@
     private void GoToWorkspace()
     {
         var group = groups[selectedIndex];
-        navigationManager.NavigateTo("/GroupElementWorkspace");
+        navigationManager.NavigateTo($"/GroupElementWorkspace?group={group.Id:N}");
     }
 }
