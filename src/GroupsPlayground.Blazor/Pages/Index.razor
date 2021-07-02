@@ -1,8 +1,9 @@
 ﻿@page "/"
 @using GroupsPlayground.Persistence
 @using GroupsPlayground.Domain
+@inject NavigationManager navigationManager
 
-<h1>Library</h1>
+<h1>Group library</h1>
 
 <div>
     <select @bind="@selectedIndex" name="groups" size="5">
@@ -15,9 +16,10 @@
 </div>
 
 <form method="get" action="/CreateGroup">
-    <button type="submit">Create new group</button>
+    <button type="submit">Create</button>
 </form>
-<button @onclick="@RemoveSelectedGroup">Remove group</button>
+<button @onclick="@RemoveSelectedGroup">Remove</button>
+<button @onclick="@GoToWorkspace">Workspace</button>
 
 @code
 {
@@ -30,11 +32,6 @@
         RefreshGroups(session);
     }
 
-    private void RefreshGroups(Session session)
-    {
-        groups = session.GroupRepository.GetAllGroups();
-    }
-
     private void RemoveSelectedGroup()
     {
         var group = groups[selectedIndex];
@@ -42,5 +39,16 @@
         session.GroupRepository.RemoveGroup(group);
         session.SaveChanges();
         RefreshGroups(session);
+    }
+
+    private void RefreshGroups(Session session)
+    {
+        groups = session.GroupRepository.GetAllGroups();
+    }
+
+    private void GoToWorkspace()
+    {
+        var group = groups[selectedIndex];
+        navigationManager.NavigateTo("/GroupElementWorkspace");
     }
 }
