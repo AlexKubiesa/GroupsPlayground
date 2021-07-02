@@ -5,23 +5,42 @@
 <h1>Library</h1>
 
 <div>
-    <select name="groups" size="5">
-        @foreach (var group in groups)
+    <select @bind="@selectedIndex" name="groups" size="5">
+        @for (int index = 0; index < groups.Count; index++)
         {
-            <option style="width: 50px">@group.Name (@group.Elements.Count)</option>
+            var group = groups[index];
+            <option style="width: 50px" value="@index">@group.Name (@group.Elements.Count)</option>
         }
     </select>
 </div>
 
-<button onclick="window.location.href='/CreateGroup'">Create new group</button>
+<form method="get" action="/CreateGroup">
+    <button type="submit">Create new group</button>
+</form>
+<button @onclick="@RemoveSelectedGroup">Remove group</button>
 
 @code
 {
     private List<Group> groups;
+    private int selectedIndex;
 
     protected override void OnInitialized()
     {
         using Session session = new();
+        RefreshGroups(session);
+    }
+
+    private void RefreshGroups(Session session)
+    {
         groups = session.GroupRepository.GetAllGroups();
+    }
+
+    private void RemoveSelectedGroup()
+    {
+        var group = groups[selectedIndex];
+        using Session session = new();
+        session.GroupRepository.RemoveGroup(group);
+        session.SaveChanges();
+        RefreshGroups(session);
     }
 }

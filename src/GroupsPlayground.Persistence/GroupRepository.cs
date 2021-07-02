@@ -29,5 +29,7 @@ namespace GroupsPlayground.Persistence
         }
 
         public void AddGroup(Group group) => context.Groups.Add(group);
+
+        public void RemoveGroup(Group group) => context.Groups.Remove(group);
     }
 }
