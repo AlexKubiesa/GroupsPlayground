@@ -10,6 +10,16 @@
     @(group?.Name)
 </div>
 
+@if (group != null)
+{
+    <div>
+        @foreach (var element in group.Elements)
+        {
+            @element.Symbol
+        }
+    </div>
+}
+
 @code {
     private Group group;
 
