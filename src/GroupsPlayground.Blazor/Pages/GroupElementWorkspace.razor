@@ -4,18 +4,14 @@
 @using Microsoft.AspNetCore.WebUtilities
 @inject NavigationManager navigationManager
 
-<h3>Group element workspace</h3>
-
-<div>
-    @(group?.Name)
-</div>
+<h1>@((group == null) ? string.Empty : (group.Name + ": "))workspace</h1>
 
 @if (group != null)
 {
     <div>
         @foreach (var element in group.Elements)
         {
-            @element.Symbol
+            <button class="btn btn-primary">@element.Symbol</button>
         }
     </div>
 }
