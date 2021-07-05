@@ -1,32 +1,15 @@
 ﻿@page "/CreateGroup"
+@using System.Text
 @using GroupsPlayground.Persistence
 @using GroupsPlayground.Domain
-@using System.Text
+@using GroupsPlayground.Blazor.Components.CreateGroup
 @inject NavigationManager navigationManager
 
 <h1>Create new group</h1>
 
 <div>
-    @if (!groupPropertiesModel.Submitted)
-    {
-        <h3>Group properties</h3>
-
-        <EditForm Model="@groupPropertiesModel" OnValidSubmit="@OnGroupPropertiesSubmitted">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <p>
-                <label for="name">Name:</label><br />
-                <InputText id="name" @bind-Value="groupPropertiesModel.Name" /><br />
-            </p>
-            <p>
-                <label for="size">Size:</label><br />
-                <InputNumber id="size" @bind-Value="groupPropertiesModel.Size"></InputNumber><br />
-            </p>
-            <button type="button" onclick="window.location.href = '/'">Cancel</button>
-            <button type="submit">Next</button><br />
-        </EditForm>
-    }
-    else
+    <GroupProperties @ref="groupProperties" Visible="@showGroupProperties" OnBack="@OnGroupPropertiesBack" OnNext="@OnGroupPropertiesNext"/>
+    @if (groupOperationModel is { Visible: true })
     {
         <h3>Cayley table</h3>
 
@@ -68,61 +51,67 @@
 </div>
 
 
-    @code {
-        private GroupPropertiesModel groupPropertiesModel = new();
-        private GroupOperationModel groupOperationModel;
+@code {
+    private bool showGroupProperties = true;
+    private GroupProperties groupProperties;
+    private GroupOperationModel groupOperationModel;
 
-        public void OnGroupPropertiesSubmitted()
-        {
-            groupPropertiesModel.Submitted = true;
-            groupOperationModel = new GroupOperationModel(groupPropertiesModel.Size);
-        }
-
-        public void OnGroupOperationBack()
-        {
-            groupPropertiesModel = new GroupPropertiesModel();
-            groupOperationModel = null;
-        }
-
-        public async Task OnGroupOperationSubmitted()
-        {
-            if (!ValidateCayleyTable())
-                return;
-            await DoCreateGroup();
-        }
-
-        private bool ValidateCayleyTable()
-        {
-            groupOperationModel.ValidationMessage = string.Empty;
-
-            var operation = groupOperationModel.CayleyTable.GetBinaryOperation();
-            if (!operation.IsFullyDefined())
-            {
-                groupOperationModel.ValidationMessage = "The group operation is not fully defined.\n";
-                return false;
-            }
-            
-            var compliance = GroupAxioms.CheckCompliance(operation);
-            var builder = new StringBuilder();
-            if (!compliance.IsClosed)
-                builder.AppendLine("The group operation is not closed.").AppendLine();
-            if (!compliance.IsAssociative)
-                builder.AppendLine("The group operation is not associative.").AppendLine();
-            if (!compliance.HasIdentity)
-                builder.AppendLine("There is no identity element.").AppendLine();
-            if (!compliance.HasInverses)
-                builder.AppendLine("Some elements do not have inverses.").AppendLine();
-            groupOperationModel.ValidationMessage = builder.ToString();
-
-            return compliance.Success;
-        }
-
-        private async Task DoCreateGroup()
-        {
-            using Session session = new();
-            Group group = new(Guid.NewGuid(), groupPropertiesModel.Name, groupOperationModel.CayleyTable);
-            await session.GroupRepository.AddGroupAsync(group);
-            session.SaveChanges();
-            navigationManager.NavigateTo("/");
-        }
+    public void OnGroupPropertiesBack()
+    {
+        navigationManager.NavigateTo("/");
     }
+
+    public void OnGroupPropertiesNext()
+    {
+        showGroupProperties = false;
+        groupOperationModel = new GroupOperationModel(groupProperties.Size) { Visible = true };
+    }
+
+    public void OnGroupOperationBack()
+    {
+        groupOperationModel = null;
+        showGroupProperties = true;
+    }
+
+    public async Task OnGroupOperationSubmitted()
+    {
+        if (!ValidateCayleyTable())
+            return;
+        await DoCreateGroup();
+    }
+
+    private bool ValidateCayleyTable()
+    {
+        groupOperationModel.ValidationMessage = string.Empty;
+
+        var operation = groupOperationModel.CayleyTable.GetBinaryOperation();
+        if (!operation.IsFullyDefined())
+        {
+            groupOperationModel.ValidationMessage = "The group operation is not fully defined.\n";
+            return false;
+        }
+
+        var compliance = GroupAxioms.CheckCompliance(operation);
+        var builder = new StringBuilder();
+        if (!compliance.IsClosed)
+            builder.AppendLine("The group operation is not closed.").AppendLine();
+        if (!compliance.IsAssociative)
+            builder.AppendLine("The group operation is not associative.").AppendLine();
+        if (!compliance.HasIdentity)
+            builder.AppendLine("There is no identity element.").AppendLine();
+        if (!compliance.HasInverses)
+            builder.AppendLine("Some elements do not have inverses.").AppendLine();
+        groupOperationModel.ValidationMessage = builder.ToString();
+
+        return compliance.Success;
+    }
+
+    private async Task DoCreateGroup()
+    {
+        using Session session = new();
+        Group group = new(Guid.NewGuid(), groupProperties.Name, groupOperationModel.CayleyTable);
+        await session.GroupRepository.AddGroupAsync(group);
+        session.SaveChanges();
+        navigationManager.NavigateTo("/");
+    }
+}

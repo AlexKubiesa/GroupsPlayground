@@ -1,0 +1,36 @@
+﻿@if (Visible)
+{
+    <h3>Group properties</h3>
+
+    <EditForm Model="@model" OnValidSubmit="@OnNext">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <p>
+            <label for="name">Name:</label><br />
+            <InputText id="name" @bind-Value="model.Name" /><br />
+        </p>
+        <p>
+            <label for="size">Size:</label><br />
+            <InputNumber id="size" @bind-Value="model.Size"></InputNumber><br />
+        </p>
+        <button type="button" @onclick="@OnBack">Cancel</button>
+        <button type="submit">Next</button><br />
+    </EditForm>
+}
+
+@code {
+    private readonly GroupPropertiesModel model = new();
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    [Parameter]
+    public EventCallback OnNext { get; set; }
+
+    public string Name => model.Name;
+
+    public int Size => model.Size;
+}

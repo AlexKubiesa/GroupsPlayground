@@ -11,18 +11,6 @@ namespace GroupsPlayground.Blazor.Pages
     {
     }
 
-    public class GroupPropertiesModel
-    {
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        [Range(1, 6, ErrorMessage = "Size must be between 1 and 6.")]
-        public int Size { get; set; }
-
-        public bool Submitted { get; set; }
-    }
-
     public class GroupOperationModel
     {
         public GroupOperationModel(int elementCount)
@@ -42,6 +30,7 @@ namespace GroupsPlayground.Blazor.Pages
         public GroupOperationElementModel[] Elements { get; }
         public GroupOperationProductModel[][] Products { get; }
         public string ValidationMessage { get; set; }
+        public bool Visible { get; set; }
     }
 
     public class GroupOperationElementModel
