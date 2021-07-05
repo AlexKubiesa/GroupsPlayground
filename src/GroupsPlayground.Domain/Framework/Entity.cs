@@ -2,7 +2,7 @@
 
 namespace GroupsPlayground.Domain.Framework
 {
-    public abstract class Entity
+    public abstract class Entity : IEntity
     {
         protected Entity(Guid id) => Id = id;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Persistence.Model
 {
     public class GroupElementProduct : Entity
     {
@@ -9,7 +9,7 @@ namespace GroupsPlayground.Domain
         {
         }
 
-        public GroupElementProduct(Guid id, IGroupElement first, IGroupElement second, IGroupElement product)
+        public GroupElementProduct(Guid id, GroupElement first, GroupElement second, GroupElement product)
             : this(id)
         {
             First = first ?? throw new ArgumentNullException(nameof(first));
@@ -17,8 +17,8 @@ namespace GroupsPlayground.Domain
             Product = product ?? throw new ArgumentNullException(nameof(product));
         }
 
-        public IGroupElement First { get; }
-        public IGroupElement Second { get; }
-        public IGroupElement Product { get; }
+        public GroupElement First { get; }
+        public GroupElement Second { get; }
+        public GroupElement Product { get; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GroupsPlayground.Domain;
+using GroupsPlayground.Persistence.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroupsPlayground.Persistence
@@ -16,7 +17,7 @@ namespace GroupsPlayground.Persistence
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Group GetGroup(Guid id) => context.Groups.Find(id);
+        public Group GetGroup(Guid id) => GroupMapper.ToDomain(context.Groups.Find(id));
 
         public List<Group> GetAllGroups()
         {
@@ -26,13 +27,13 @@ namespace GroupsPlayground.Persistence
                 context.Entry(groups[0]).Collection(x => x.Elements).Load();
             }
 
-            return groups;
+            return groups.Select(GroupMapper.ToDomain).ToList();
         }
 
-        public void AddGroup(Group group) => context.Groups.Add(group);
+        public void AddGroup(Group group) => context.Groups.Add(GroupMapper.ToPersistence(group));
 
-        public async Task AddGroupAsync(Group group) => await context.Groups.AddAsync(group);
+        public async Task AddGroupAsync(Group group) => await context.Groups.AddAsync(GroupMapper.ToPersistence(group));
 
-        public void RemoveGroup(Group group) => context.Groups.Remove(group);
+        public void RemoveGroup(Group group) => context.Groups.Remove(GroupMapper.ToPersistence(group));
     }
 }

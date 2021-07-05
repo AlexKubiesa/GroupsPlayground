@@ -2,7 +2,7 @@
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Persistence.Model
 {
     public sealed class Symbol : ValueObject<Symbol>
     {

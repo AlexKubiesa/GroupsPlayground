@@ -1,6 +1,6 @@
 ﻿using System;
-using GroupsPlayground.Domain;
 using GroupsPlayground.Domain.Framework;
+using GroupsPlayground.Persistence.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 

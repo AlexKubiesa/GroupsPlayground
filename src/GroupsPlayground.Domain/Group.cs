@@ -16,6 +16,7 @@ namespace GroupsPlayground.Domain
             };
 
         private string name;
+        private readonly IReadOnlyList<GroupElement> elements;
 
         private Group(Guid id, string name) : base(id)
         {
@@ -34,7 +35,7 @@ namespace GroupsPlayground.Domain
                 throw new ArgumentOutOfRangeException(nameof(cayleyTable),
                     "The operation defined by the Cayley table is not a group operation.");
 
-            Elements = cayleyTable.Symbols.Select(x => new GroupElement(Guid.NewGuid(), x)).ToArray();
+            elements = cayleyTable.Symbols.Select(x => new GroupElement(Guid.NewGuid(), x)).ToArray();
             Products = cayleyTable.Products
                 .SelectMany((row, rowIndex) =>
                     row.Select((product, columnIndex) =>
@@ -59,7 +60,20 @@ namespace GroupsPlayground.Domain
             }
         }
 
-        public IReadOnlyList<GroupElement> Elements { get; }
+        public void RenameElement(IGroupElement element, Symbol newSymbol)
+        {
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            if (newSymbol == null)
+                throw new ArgumentNullException(nameof(newSymbol));
+            if (!elements.Contains(element))
+                throw new InvalidOperationException("The group does not contain this element.");
+            if (elements.Except(new[] { element }).Any(x => x.Symbol == newSymbol))
+                throw new InvalidOperationException($"Symbol {newSymbol} is already in use.");
+            ((GroupElement)element).Symbol = newSymbol;
+        }
+
+        public IReadOnlyList<IGroupElement> Elements => elements;
 
         public IReadOnlyCollection<GroupElementProduct> Products { get; }
     }

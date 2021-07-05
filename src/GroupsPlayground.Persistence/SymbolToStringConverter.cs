@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using GroupsPlayground.Domain;
+﻿using GroupsPlayground.Persistence.Model;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GroupsPlayground.Persistence

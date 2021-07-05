@@ -1,9 +1,9 @@
 ﻿using System;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Persistence.Model
 {
-    public class GroupElement : Entity, IGroupElement
+    public class GroupElement : Entity
     {
         private Symbol symbol;
 
