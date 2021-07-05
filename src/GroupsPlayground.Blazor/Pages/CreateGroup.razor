@@ -9,7 +9,7 @@
 
 <div>
     <GroupProperties @ref="groupProperties" Visible="@showGroupProperties" OnBack="@OnGroupPropertiesBack" OnNext="@OnGroupPropertiesNext"/>
-    @if (groupOperationModel is { Visible: true })
+    @if (showGroupOperation)
     {
         <h3>Cayley table</h3>
 
@@ -30,12 +30,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                @for (int rowIndex = 0; rowIndex < groupOperationModel.Elements.Length; rowIndex++)
+                @for (int rowIndex = 0; rowIndex < groupOperationModel.Elements.Count; rowIndex++)
                 {
                     var element = groupOperationModel.Elements[rowIndex];
                     <tr>
                         <th>@element.Symbol</th>
-                        @for (int columnIndex = 0; columnIndex < groupOperationModel.Elements.Length; columnIndex++)
+                        @for (int columnIndex = 0; columnIndex < groupOperationModel.Elements.Count; columnIndex++)
                         {
                             var product = groupOperationModel.Products[rowIndex][columnIndex];
                             <td><InputText @bind-Value="product.Symbol"/></td>
@@ -52,9 +52,10 @@
 
 
 @code {
-    private bool showGroupProperties = true;
     private GroupProperties groupProperties;
-    private GroupOperationModel groupOperationModel;
+    private bool showGroupProperties = true;
+    private readonly GroupOperationModel groupOperationModel = new();
+    private bool showGroupOperation;
 
     public void OnGroupPropertiesBack()
     {
@@ -64,12 +65,13 @@
     public void OnGroupPropertiesNext()
     {
         showGroupProperties = false;
-        groupOperationModel = new GroupOperationModel(groupProperties.Size) { Visible = true };
+        showGroupOperation = true;
+        groupOperationModel.ElementCount = groupProperties.Size;
     }
 
     public void OnGroupOperationBack()
     {
-        groupOperationModel = null;
+        showGroupOperation = false;
         showGroupProperties = true;
     }
 

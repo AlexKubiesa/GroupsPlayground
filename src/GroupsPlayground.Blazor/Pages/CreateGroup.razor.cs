@@ -13,24 +13,35 @@ namespace GroupsPlayground.Blazor.Pages
 
     public class GroupOperationModel
     {
-        public GroupOperationModel(int elementCount)
+        private readonly List<GroupOperationElementModel> elements = new();
+
+        public int ElementCount
         {
-            CayleyTable = new CayleyTable(Guid.NewGuid(), elementCount);
+            get => Elements.Count;
+            set
+            {
+                if (value == Elements.Count)
+                    return;
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
 
-            Elements = CayleyTable.Symbols.Select(x => new GroupOperationElementModel(x)).ToArray();
+                CayleyTable = new CayleyTable(Guid.NewGuid(), value);
 
-            Products = CayleyTable.Products
-                .Select((row, rowIndex) =>
-                    row.Select((product, columnIndex) => new GroupOperationProductModel(CayleyTable, rowIndex, columnIndex))
-                        .ToArray())
-                .ToArray();
+                elements.Clear();
+                elements.AddRange(CayleyTable.Symbols.Select(x => new GroupOperationElementModel(x)));
+
+                Products = CayleyTable.Products
+                    .Select((row, rowIndex) =>
+                        row.Select((product, columnIndex) => new GroupOperationProductModel(CayleyTable, rowIndex, columnIndex))
+                            .ToArray())
+                    .ToArray();
+            }
         }
 
-        public CayleyTable CayleyTable { get; }
-        public GroupOperationElementModel[] Elements { get; }
-        public GroupOperationProductModel[][] Products { get; }
+        public CayleyTable CayleyTable { get; private set; }
+        public IReadOnlyList<GroupOperationElementModel> Elements => elements;
+        public GroupOperationProductModel[][] Products { get; private set; }
         public string ValidationMessage { get; set; }
-        public bool Visible { get; set; }
     }
 
     public class GroupOperationElementModel
