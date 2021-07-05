@@ -17,6 +17,7 @@ namespace GroupsPlayground.Domain
 
         private string name;
         private readonly IReadOnlyList<GroupElement> elements;
+        private readonly IDictionary<GroupElement, IDictionary<GroupElement, GroupElement>> products;
 
         private Group(Guid id, string name) : base(id)
         {
@@ -36,16 +37,19 @@ namespace GroupsPlayground.Domain
                     "The operation defined by the Cayley table is not a group operation.");
 
             elements = cayleyTable.Symbols.Select(x => new GroupElement(Guid.NewGuid(), x)).ToArray();
-            Products = cayleyTable.Products
-                .SelectMany((row, rowIndex) =>
-                    row.Select((product, columnIndex) =>
-                            new GroupElementProduct(
-                                Guid.NewGuid(),
-                                Elements[rowIndex],
-                                Elements[columnIndex],
-                                Elements.Single(x => x.Symbol.Equals(product))))
-                        .ToList())
-                .ToList();
+
+            products = new Dictionary<GroupElement, IDictionary<GroupElement, GroupElement>>(elements.Count);
+            for (int firstIndex = 0; firstIndex < elements.Count; firstIndex++)
+            {
+                var first = elements[firstIndex];
+                products.Add(first, new Dictionary<GroupElement, GroupElement>(elements.Count));
+                for (int secondIndex = 0; secondIndex < elements.Count; secondIndex++)
+                {
+                    var second = elements[secondIndex];
+                    products[first][second] =
+                        elements.Single(x => x.Symbol.Equals(cayleyTable.Products[firstIndex][secondIndex]));
+                }
+            }
         }
 
         public string Name
@@ -60,6 +64,8 @@ namespace GroupsPlayground.Domain
             }
         }
 
+        public IReadOnlyList<IGroupElement> Elements => elements;
+
         public void RenameElement(IGroupElement element, Symbol newSymbol)
         {
             if (element == null)
@@ -73,8 +79,6 @@ namespace GroupsPlayground.Domain
             ((GroupElement)element).Symbol = newSymbol;
         }
 
-        public IReadOnlyList<IGroupElement> Elements => elements;
-
-        public IReadOnlyCollection<GroupElementProduct> Products { get; }
+        public IGroupElement Multiply(IGroupElement first, IGroupElement second) => products[(GroupElement)first][(GroupElement)second];
     }
 }

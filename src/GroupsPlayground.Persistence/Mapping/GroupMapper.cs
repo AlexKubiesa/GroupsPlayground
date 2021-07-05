@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
@@ -19,13 +20,23 @@ namespace GroupsPlayground.Persistence.Mapping
             return new Domain.Group(group.Id, group.Name, cayleyTable);
         }
 
-        public static Model.Group ToPersistence(Domain.Group group) =>
-            new Model.Group(group.Id)
+        public static Model.Group ToPersistence(Domain.Group group)
+        {
+            var elements = group.Elements.ToDictionary(x => x, ToPersistence);
+            var products = new List<Model.GroupElementProduct>(group.Elements.Count * group.Elements.Count);
+            products.AddRange(
+                from first in elements.Keys
+                from second in elements.Keys
+                select new Model.GroupElementProduct(Guid.NewGuid(), elements[first], elements[second],
+                    elements[@group.Multiply(first, second)]));
+
+            return new Model.Group(group.Id)
             {
                 Name = group.Name,
-                Elements = group.Elements.Select(ToPersistence).ToArray(),
-                Products = group.Products.Select(ToPersistence).ToArray()
+                Elements = elements.Values.ToArray(),
+                Products = products
             };
+        }
 
         private static Model.GroupElement ToPersistence(Domain.IGroupElement element) =>
             new Model.GroupElement(element.Id, SymbolMapper.ToPersistence(element.Symbol));

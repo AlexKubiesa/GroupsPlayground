@@ -34,6 +34,6 @@ namespace GroupsPlayground.Persistence
 
         public async Task AddGroupAsync(Group group) => await context.Groups.AddAsync(GroupMapper.ToPersistence(group));
 
-        public void RemoveGroup(Group group) => context.Groups.Remove(GroupMapper.ToPersistence(group));
+        public void RemoveGroup(Group group) => context.Groups.Remove(context.Groups.Find(group.Id));
     }
 }
