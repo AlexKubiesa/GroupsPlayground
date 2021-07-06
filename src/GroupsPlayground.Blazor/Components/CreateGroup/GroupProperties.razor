@@ -1,8 +1,10 @@
-﻿@if (Visible)
+﻿@inherits Step
+
+@if (Visible)
 {
     <h3>Group properties</h3>
 
-    <EditForm Model="@model" OnValidSubmit="@OnNext">
+    <EditForm EditContext="@formContext">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <p>
@@ -13,24 +15,25 @@
             <label for="size">Size:</label><br />
             <InputNumber id="size" @bind-Value="model.Size"></InputNumber><br />
         </p>
-        <button type="button" @onclick="@OnBack">Cancel</button>
-        <button type="submit">Next</button><br />
     </EditForm>
 }
 
 @code {
-    private readonly GroupPropertiesModel model = new();
+    private GroupPropertiesModel model;
+    private EditContext formContext;
+
+    protected override void OnInitialized()
+    {
+        model = new GroupPropertiesModel();
+        formContext = new EditContext(model);
+    }
 
     [Parameter]
     public bool Visible { get; set; }
 
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
-    [Parameter]
-    public EventCallback OnNext { get; set; }
-
     public string Name => model.Name;
 
     public int Size => model.Size;
+
+    public override bool Validate() => formContext.Validate();
 }

@@ -3,13 +3,15 @@
 @using Microsoft.AspNetCore.Components
 @using System.Text
 
+@inherits Step
+
 @if (Visible)
 {
     <h3>Cayley table</h3>
 
     <p>Define the group operation by filling in the Cayley table.</p>
 
-    <EditForm Model="@model" OnValidSubmit="@Next">
+    <EditForm EditContext="@formContext">
         <p>
             @model.ValidationMessage
         </p>
@@ -38,22 +40,21 @@
             }
             </tbody>
         </table>
-        <button type="button" @onclick="@OnBack">Back</button>
-        <button type="submit">Finish</button>
     </EditForm>
 }
 
 @code {
-    private readonly GroupOperationModel model = new();
+    private GroupOperationModel model;
+    private EditContext formContext;
+
+    protected override void OnInitialized()
+    {
+        model = new GroupOperationModel();
+        formContext = new EditContext(model);
+    }
 
     [Parameter]
     public bool Visible { get; set; }
-
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
-    [Parameter]
-    public EventCallback OnNext { get; set; }
 
     public int ElementCount
     {
@@ -63,11 +64,11 @@
 
     public CayleyTable CayleyTable => model.CayleyTable;
 
-    private void Next()
+    public override bool Validate()
     {
-        if (!ValidateCayleyTable())
-            return;
-        OnNext.InvokeAsync();
+        bool success = ValidateCayleyTable();
+        StateHasChanged();
+        return success;
     }
 
     private bool ValidateCayleyTable()

@@ -8,36 +8,78 @@
 <h1>Create new group</h1>
 
 <div>
-    <GroupProperties @ref="groupProperties" Visible="@showGroupProperties" OnBack="@OnGroupPropertiesBack" OnNext="@OnGroupPropertiesNext"/>
-    <GroupOperation @ref="groupOperation" Visible="@showGroupOperation" OnBack="@OnGroupOperationBack" OnNext="@OnGroupOperationNext"/>
+    <GroupProperties @ref="groupProperties" Visible="@showGroupProperties"/>
+    <GroupOperation @ref="groupOperation" Visible="@showGroupOperation"/>
+</div>
+<div>
+    <button type="button" @onclick="@OnBack">Back</button>
+    <button type="button" @onclick="@OnNext">@(isLastStep ? "Finish" : "Next")</button>
 </div>
 
 
 @code {
+    private readonly List<Step> steps = new();
+    private int stepIndex;
+    private Step step;
+    private bool isLastStep;
     private GroupProperties groupProperties;
     private bool showGroupProperties = true;
     private GroupOperation groupOperation;
     private bool showGroupOperation;
 
-    public void OnGroupPropertiesBack()
+    protected override void OnAfterRender(bool firstRender)
     {
-        navigationManager.NavigateTo("/");
+        if (!firstRender)
+            return;
+
+        steps.Add(groupProperties);
+        steps.Add(groupOperation);
+        stepIndex = 0;
+        step = steps[0];
     }
 
-    public void OnGroupPropertiesNext()
+    private void Redirect() => navigationManager.NavigateTo("/");
+
+    private void UpdateStep()
     {
-        showGroupProperties = false;
-        showGroupOperation = true;
-        groupOperation.ElementCount = groupProperties.Size;
+        step = steps[stepIndex];
+        showGroupProperties = (step == groupProperties);
+        showGroupOperation = (step == groupOperation);
+        isLastStep = (stepIndex == (steps.Count - 1));
     }
 
-    public void OnGroupOperationBack()
+    public void OnBack()
     {
-        showGroupOperation = false;
-        showGroupProperties = true;
+        if (stepIndex == 0)
+        {
+            Redirect();
+            return;
+        }
+
+        stepIndex--;
+        UpdateStep();
     }
 
-    public async Task OnGroupOperationNext() => await DoCreateGroup();
+    public async Task OnNext()
+    {
+        if (!step.Validate())
+            return;
+
+        if (step == groupProperties)
+        {
+            groupOperation.ElementCount = groupProperties.Size;
+        }
+
+        if (step == groupOperation)
+        {
+            await DoCreateGroup();
+            Redirect();
+            return;
+        }
+
+        stepIndex++;
+        UpdateStep();
+    }
 
     private async Task DoCreateGroup()
     {
@@ -45,6 +87,5 @@
         Group group = new(Guid.NewGuid(), groupProperties.Name, groupOperation.CayleyTable);
         await session.GroupRepository.AddGroupAsync(group);
         session.SaveChanges();
-        navigationManager.NavigateTo("/");
     }
 }
