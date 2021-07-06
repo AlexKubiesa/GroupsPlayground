@@ -8,8 +8,14 @@
 <h1>Create new group</h1>
 
 <div>
-    <GroupProperties @ref="groupProperties" Visible="@showGroupProperties"/>
-    <GroupOperation @ref="groupOperation" Visible="@showGroupOperation"/>
+    <CascadingValue Value="@stepIndex">
+        <WizardStep Index="0">
+            <GroupProperties @ref="groupProperties"/>
+        </WizardStep>
+        <WizardStep Index="1">
+            <GroupOperation @ref="groupOperation"/>
+        </WizardStep>
+    </CascadingValue>
 </div>
 <div>
     <button type="button" @onclick="@OnBack">Back</button>
@@ -18,14 +24,12 @@
 
 
 @code {
-    private readonly List<Step> steps = new();
+    private readonly List<WizardStepContent> steps = new();
     private int stepIndex;
-    private Step step;
+    private WizardStepContent step;
     private bool isLastStep;
     private GroupProperties groupProperties;
-    private bool showGroupProperties = true;
     private GroupOperation groupOperation;
-    private bool showGroupOperation;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -36,16 +40,6 @@
         steps.Add(groupOperation);
         stepIndex = 0;
         step = steps[0];
-    }
-
-    private void Redirect() => navigationManager.NavigateTo("/");
-
-    private void UpdateStep()
-    {
-        step = steps[stepIndex];
-        showGroupProperties = (step == groupProperties);
-        showGroupOperation = (step == groupOperation);
-        isLastStep = (stepIndex == (steps.Count - 1));
     }
 
     public void OnBack()
@@ -79,6 +73,14 @@
 
         stepIndex++;
         UpdateStep();
+    }
+
+    private void Redirect() => navigationManager.NavigateTo("/");
+
+    private void UpdateStep()
+    {
+        step = steps[stepIndex];
+        isLastStep = (stepIndex == (steps.Count - 1));
     }
 
     private async Task DoCreateGroup()

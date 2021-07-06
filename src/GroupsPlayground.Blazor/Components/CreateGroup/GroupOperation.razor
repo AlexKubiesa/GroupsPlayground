@@ -3,45 +3,42 @@
 @using Microsoft.AspNetCore.Components
 @using System.Text
 
-@inherits Step
+@inherits WizardStepContent
 
-@if (Visible)
-{
-    <h3>Cayley table</h3>
+<h3>Cayley table</h3>
 
-    <p>Define the group operation by filling in the Cayley table.</p>
+<p>Define the group operation by filling in the Cayley table.</p>
 
-    <EditForm EditContext="@formContext">
-        <p>
-            @model.ValidationMessage
-        </p>
-        <table class="table">
-            <thead>
+<EditForm EditContext="@formContext">
+    <p>
+        @model.ValidationMessage
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            @foreach (var element in model.Elements)
+            {
+                <th>@element.Symbol</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @for (int rowIndex = 0; rowIndex < model.ElementCount; rowIndex++)
+        {
+            var element = model.Elements[rowIndex];
             <tr>
-                <th></th>
-                @foreach (var element in model.Elements)
+                <th>@element.Symbol</th>
+                @for (int columnIndex = 0; columnIndex < model.ElementCount; columnIndex++)
                 {
-                    <th>@element.Symbol</th>
+                    var product = model.Products[rowIndex][columnIndex];
+                    <td><InputText @bind-Value="product.Symbol"/></td>
                 }
             </tr>
-            </thead>
-            <tbody>
-            @for (int rowIndex = 0; rowIndex < model.ElementCount; rowIndex++)
-            {
-                var element = model.Elements[rowIndex];
-                <tr>
-                    <th>@element.Symbol</th>
-                    @for (int columnIndex = 0; columnIndex < model.ElementCount; columnIndex++)
-                    {
-                        var product = model.Products[rowIndex][columnIndex];
-                        <td><InputText @bind-Value="product.Symbol"/></td>
-                    }
-                </tr>
-            }
-            </tbody>
-        </table>
-    </EditForm>
-}
+        }
+        </tbody>
+    </table>
+</EditForm>
 
 @code {
     private GroupOperationModel model;
@@ -53,13 +50,14 @@
         formContext = new EditContext(model);
     }
 
-    [Parameter]
-    public bool Visible { get; set; }
-
     public int ElementCount
     {
         get => model.ElementCount;
-        set => model.ElementCount = value;
+        set
+        {
+            model.ElementCount = value;
+            StateHasChanged();
+        }
     }
 
     public CayleyTable CayleyTable => model.CayleyTable;
