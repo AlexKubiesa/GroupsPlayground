@@ -9,52 +9,14 @@
 
 <div>
     <GroupProperties @ref="groupProperties" Visible="@showGroupProperties" OnBack="@OnGroupPropertiesBack" OnNext="@OnGroupPropertiesNext"/>
-    @if (showGroupOperation)
-    {
-        <h3>Cayley table</h3>
-
-        <p>Define the group operation by filling in the Cayley table.</p>
-
-        <EditForm Model="@groupOperationModel" OnValidSubmit="@OnGroupOperationSubmitted">
-            <p>
-                @groupOperationModel.ValidationMessage
-            </p>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th></th>
-                    @foreach (var element in groupOperationModel.Elements)
-                    {
-                        <th>@element.Symbol</th>
-                    }
-                </tr>
-                </thead>
-                <tbody>
-                @for (int rowIndex = 0; rowIndex < groupOperationModel.Elements.Count; rowIndex++)
-                {
-                    var element = groupOperationModel.Elements[rowIndex];
-                    <tr>
-                        <th>@element.Symbol</th>
-                        @for (int columnIndex = 0; columnIndex < groupOperationModel.Elements.Count; columnIndex++)
-                        {
-                            var product = groupOperationModel.Products[rowIndex][columnIndex];
-                            <td><InputText @bind-Value="product.Symbol"/></td>
-                        }
-                    </tr>
-                }
-                </tbody>
-            </table>
-            <button type="button" @onclick="@OnGroupOperationBack">Back</button>
-            <button type="submit">Finish</button>
-        </EditForm>
-    }
+    <GroupOperation @ref="groupOperation" Visible="@showGroupOperation" OnBack="@OnGroupOperationBack" OnNext="@OnGroupOperationNext"/>
 </div>
 
 
 @code {
     private GroupProperties groupProperties;
     private bool showGroupProperties = true;
-    private readonly GroupOperationModel groupOperationModel = new();
+    private GroupOperation groupOperation;
     private bool showGroupOperation;
 
     public void OnGroupPropertiesBack()
@@ -66,7 +28,7 @@
     {
         showGroupProperties = false;
         showGroupOperation = true;
-        groupOperationModel.ElementCount = groupProperties.Size;
+        groupOperation.ElementCount = groupProperties.Size;
     }
 
     public void OnGroupOperationBack()
@@ -75,43 +37,12 @@
         showGroupProperties = true;
     }
 
-    public async Task OnGroupOperationSubmitted()
-    {
-        if (!ValidateCayleyTable())
-            return;
-        await DoCreateGroup();
-    }
-
-    private bool ValidateCayleyTable()
-    {
-        groupOperationModel.ValidationMessage = string.Empty;
-
-        var operation = groupOperationModel.CayleyTable.GetBinaryOperation();
-        if (!operation.IsFullyDefined())
-        {
-            groupOperationModel.ValidationMessage = "The group operation is not fully defined.\n";
-            return false;
-        }
-
-        var compliance = GroupAxioms.CheckCompliance(operation);
-        var builder = new StringBuilder();
-        if (!compliance.IsClosed)
-            builder.AppendLine("The group operation is not closed.").AppendLine();
-        if (!compliance.IsAssociative)
-            builder.AppendLine("The group operation is not associative.").AppendLine();
-        if (!compliance.HasIdentity)
-            builder.AppendLine("There is no identity element.").AppendLine();
-        if (!compliance.HasInverses)
-            builder.AppendLine("Some elements do not have inverses.").AppendLine();
-        groupOperationModel.ValidationMessage = builder.ToString();
-
-        return compliance.Success;
-    }
+    public async Task OnGroupOperationNext() => await DoCreateGroup();
 
     private async Task DoCreateGroup()
     {
         using Session session = new();
-        Group group = new(Guid.NewGuid(), groupProperties.Name, groupOperationModel.CayleyTable);
+        Group group = new(Guid.NewGuid(), groupProperties.Name, groupOperation.CayleyTable);
         await session.GroupRepository.AddGroupAsync(group);
         session.SaveChanges();
         navigationManager.NavigateTo("/");
