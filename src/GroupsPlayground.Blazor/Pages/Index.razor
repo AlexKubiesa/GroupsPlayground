@@ -6,7 +6,7 @@
 <h1>Group library</h1>
 
 <div>
-    <select @bind="@selectedIndex" name="groups" size="5">
+    <select @bind="@selectedIndex" name="groups" size="5" style="width: 8em">
         @for (int index = 0; index < groups.Count; index++)
         {
             var group = groups[index];
@@ -15,11 +15,9 @@
     </select>
 </div>
 
-<form method="get" action="/CreateGroup">
-    <button type="submit">Create</button>
-</form>
-<button @onclick="@RemoveSelectedGroup">Remove</button>
-<button @onclick="@GoToWorkspace">Workspace</button>
+<button @onclick="@Create" class="btn btn-primary">Create</button>
+<button @onclick="@Remove" class="btn btn-primary">Remove</button>
+<button @onclick="@Workspace" class="btn btn-primary" disabled="@(selectedIndex < 0 || selectedIndex >= groups.Count)">Workspace</button>
 
 @code
 {
@@ -32,7 +30,9 @@
         RefreshGroups(session);
     }
 
-    private void RemoveSelectedGroup()
+    private void Create() => navigationManager.NavigateTo("/CreateGroup");
+
+    private void Remove()
     {
         var group = groups[selectedIndex];
         using Session session = new();
@@ -44,9 +44,10 @@
     private void RefreshGroups(Session session)
     {
         groups = session.GroupRepository.GetAllGroups();
+        selectedIndex = 0;
     }
 
-    private void GoToWorkspace()
+    private void Workspace()
     {
         var group = groups[selectedIndex];
         navigationManager.NavigateTo($"/GroupElementWorkspace?group={group.Id:N}");

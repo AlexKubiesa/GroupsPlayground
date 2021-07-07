@@ -21,8 +21,23 @@
     </CascadingValue>
 </div>
 <div>
-    <button type="button" @onclick="@OnBack">Back</button>
-    <button type="button" @onclick="@OnNext">@(isLastStep ? "Finish" : "Next")</button>
+    @if (isFirstStep)
+    {
+        <button type="button" @onclick="@OnCancel" class="btn">Cancel</button>
+    }
+    else
+    {
+        <button type="button" @onclick="@OnBack" class="btn">Back</button>
+    }
+    
+    @if (isLastStep)
+    {
+        <button type="button" @onclick="@OnNext" class="btn btn-primary">Finish</button>
+    }
+    else
+    {
+        <button type="button" @onclick="@OnNext" class="btn btn-outline-primary">Next</button>
+    }
 </div>
 
 
@@ -30,6 +45,7 @@
     private readonly List<WizardStepContent> steps = new();
     private int stepIndex;
     private WizardStepContent step;
+    private bool isFirstStep = true;
     private bool isLastStep;
     private GroupProperties groupProperties;
     private GroupElements groupElements;
@@ -47,14 +63,10 @@
         UpdateStep();
     }
 
+    public void OnCancel() => Redirect();
+
     public void OnBack()
     {
-        if (stepIndex == 0)
-        {
-            Redirect();
-            return;
-        }
-
         stepIndex--;
         UpdateStep();
     }
@@ -90,6 +102,7 @@
     private void UpdateStep()
     {
         step = steps[stepIndex];
+        isFirstStep = (stepIndex == 0);
         isLastStep = (stepIndex == (steps.Count - 1));
     }
 
