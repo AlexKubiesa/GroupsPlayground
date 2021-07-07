@@ -39,19 +39,20 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
             ValidationMessage = null;
             Result = null;
 
-            var symbols = Elements
-                .Select(x => x.Symbol)
-                .Select(Symbol.Create)
-                .ToValueList();
-            string error = GroupElementSymbols.Validate(symbols);
-            if (error != null)
+            try
             {
-                ValidationMessage = error;
+                var symbols = Elements
+                    .Select(x => x.Symbol)
+                    .Select(Symbol.Create)
+                    .ToValueList();
+                Result = new GroupElementSymbols(symbols);
+                return true;
+            }
+            catch (ValidationError e)
+            {
+                ValidationMessage = e.Message;
                 return false;
             }
-
-            Result = new GroupElementSymbols(symbols);
-            return true;
         }
     }
 

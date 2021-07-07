@@ -8,17 +8,6 @@ namespace GroupsPlayground.Domain
 {
     public class GroupElementSymbols : ValueObject<GroupElementSymbols>, IReadOnlyList<Symbol>
     {
-        public static string Validate(ValueList<Symbol> symbols)
-        {
-            if (symbols.Any(x => x == null))
-                return "Some symbols are missing.";
-
-            if (!symbols.IsDistinct())
-                return "The symbols are not distinct.";
-
-            return null;
-        }
-
         private readonly ValueList<Symbol> symbols;
 
         public GroupElementSymbols(ValueList<Symbol> symbols)
@@ -26,9 +15,11 @@ namespace GroupsPlayground.Domain
             if (symbols == null)
                 throw new ArgumentNullException(nameof(symbols));
 
-            string error = Validate(symbols);
-            if (error != null)
-                throw new ArgumentOutOfRangeException(nameof(symbols), error);
+            if (symbols.Any(x => x == null))
+                throw new ValidationError("Some symbols are missing.");
+
+            if (!symbols.AreDistinct())
+                throw new ValidationError("The symbols are not distinct.");
 
             this.symbols = symbols;
         }

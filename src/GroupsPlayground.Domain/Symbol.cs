@@ -12,10 +12,13 @@ namespace GroupsPlayground.Domain
 
         public Symbol(string text)
         {
-            Text = text ?? throw new ArgumentNullException(nameof(text));
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentOutOfRangeException(nameof(text));
+
+            Text = text;
 
             if (!text.All(IsAllowedCharacter))
-                throw new ArgumentOutOfRangeException(nameof(text), "Symbol contains invalid characters.");
+                throw new ValidationError("Symbol contains invalid characters.");
         }
 
         public string Text { get; }
