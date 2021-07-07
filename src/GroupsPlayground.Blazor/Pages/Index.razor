@@ -16,13 +16,14 @@
 </div>
 
 <button @onclick="@Create" class="btn btn-primary">Create</button>
-<button @onclick="@Remove" class="btn btn-primary">Remove</button>
-<button @onclick="@Workspace" class="btn btn-primary" disabled="@(selectedIndex < 0 || selectedIndex >= groups.Count)">Workspace</button>
+<button @onclick="@Remove" class="btn btn-primary" disabled="@groupSelected">Remove</button>
+<button @onclick="@Workspace" class="btn btn-primary" disabled="@groupSelected">Workspace</button>
 
 @code
 {
     private List<Group> groups;
     private int selectedIndex;
+    private bool groupSelected;
 
     protected override void OnInitialized()
     {
@@ -41,15 +42,16 @@
         RefreshGroups(session);
     }
 
-    private void RefreshGroups(Session session)
-    {
-        groups = session.GroupRepository.GetAllGroups();
-        selectedIndex = 0;
-    }
-
     private void Workspace()
     {
         var group = groups[selectedIndex];
         navigationManager.NavigateTo($"/GroupElementWorkspace?group={group.Id:N}");
+    }
+
+    private void RefreshGroups(Session session)
+    {
+        groups = session.GroupRepository.GetAllGroups();
+        selectedIndex = 0;
+        groupSelected = groups.Any();
     }
 }
