@@ -9,17 +9,18 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
 {
     public class GroupOperationModel
     {
+        private GroupElementSymbols symbols;
         private readonly List<GroupOperationElementModel> elements = new();
 
-        public int GroupSize
+        public GroupElementSymbols Symbols
         {
-            get => Elements.Count;
+            get => symbols;
             set
             {
-                if (value == Elements.Count)
+                if (value == null)
                     return;
-                if (value < 0)
-                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                symbols = value;
 
                 CayleyTable = new CayleyTable(Guid.NewGuid(), value);
 

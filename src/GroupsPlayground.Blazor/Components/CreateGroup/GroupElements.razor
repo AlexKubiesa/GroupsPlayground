@@ -1,10 +1,14 @@
-﻿@inherits WizardStepContent
+﻿@using GroupsPlayground.Domain
+@inherits WizardStepContent
 
 <h3>Group elements</h3>
 
 <p>Choose group element symbols.</p>
 
 <EditForm Model="@model">
+    <p>
+        @model.ValidationMessage
+    </p>
     @for (int index = 0; index < model.Count; index++)
     {
         int readableIndex = index + 1;
@@ -28,4 +32,8 @@
             StateHasChanged();
         }
     }
+
+    public override bool Validate() => model.Validate();
+
+    public GroupElementSymbols Symbols => model.Result;
 }

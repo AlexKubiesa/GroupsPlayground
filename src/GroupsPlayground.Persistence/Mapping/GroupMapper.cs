@@ -9,7 +9,10 @@ namespace GroupsPlayground.Persistence.Mapping
     {
         public static Domain.Group ToDomain(Model.Group group)
         {
-            var cayleyTable = new Domain.CayleyTable(Guid.NewGuid(), group.Elements.Count);
+            var symbols =
+                new Domain.GroupElementSymbols(group.Elements.Select(x => SymbolMapper.ToDomain(x.Symbol)).ToValueList());
+
+            var cayleyTable = new Domain.CayleyTable(Guid.NewGuid(), symbols);
             foreach (var product in group.Products)
             {
                 int row = cayleyTable.Symbols.IndexOf(SymbolMapper.ToDomain(product.First.Symbol));

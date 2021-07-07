@@ -17,31 +17,22 @@ namespace GroupsPlayground.Domain
                 _ => null
             };
 
-        private readonly Symbol[] symbols;
+        private readonly GroupElementSymbols symbols;
         private readonly Symbol[][] products;
 
-        public CayleyTable(Guid id, int size) : base(id)
+        public CayleyTable(Guid id, GroupElementSymbols symbols) : base(id)
         {
-            string sizeError = ValidateSize(size);
-            if (sizeError != null)
-                throw new ArgumentOutOfRangeException(nameof(size), sizeError);
+            this.symbols = symbols;
 
-            symbols = new Symbol[size];
+            Size = symbols.Count;
 
-            for (int i = 0; i < size; i++)
+            products = new Symbol[Size][];
+
+            for (int i = 0; i < Size; i++)
             {
-                string symbol = ((char)('a' + i)).ToString();
-                symbols[i] = new Symbol(symbol);
+                products[i] = new Symbol[Size];
             }
 
-            products = new Symbol[size][];
-
-            for (int i = 0; i < size; i++)
-            {
-                products[i] = new Symbol[size];
-            }
-
-            Size = size;
         }
 
         public int Size { get; }
