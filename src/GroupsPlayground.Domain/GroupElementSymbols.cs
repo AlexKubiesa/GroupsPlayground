@@ -11,7 +11,7 @@ namespace GroupsPlayground.Domain
         public static string Validate(ValueList<Symbol> symbols)
         {
             if (symbols.Any(x => x == null))
-                return "Some symbols are null.";
+                return "Some symbols are missing.";
 
             if (!symbols.IsDistinct())
                 return "The symbols are not distinct.";

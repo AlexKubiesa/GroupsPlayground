@@ -3,7 +3,7 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
 {
-    public class GroupElement : Entity, IGroupElement
+    internal sealed class GroupElement : Entity, IGroupElement
     {
         private Symbol symbol;
 

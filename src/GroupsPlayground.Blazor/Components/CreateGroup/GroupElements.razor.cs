@@ -16,10 +16,14 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
             get => elements.Count;
             set
             {
-                elements.Clear();
-                for (int i = 0; i < value; i++)
+                while (elements.Count < value)
                 {
                     elements.Add(new GroupElementsElementModel());
+                }
+
+                while (elements.Count > value)
+                {
+                    elements.RemoveAt(elements.Count - 1);
                 }
             }
         }
@@ -35,7 +39,10 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
             ValidationMessage = null;
             Result = null;
 
-            var symbols = Elements.Select(x => new Symbol(x.Symbol)).ToValueList();
+            var symbols = Elements
+                .Select(x => x.Symbol)
+                .Select(Symbol.Create)
+                .ToValueList();
             string error = GroupElementSymbols.Validate(symbols);
             if (error != null)
             {

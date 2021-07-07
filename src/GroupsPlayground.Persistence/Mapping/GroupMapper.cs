@@ -43,9 +43,5 @@ namespace GroupsPlayground.Persistence.Mapping
 
         private static Model.GroupElement ToPersistence(Domain.IGroupElement element) =>
             new Model.GroupElement(element.Id, SymbolMapper.ToPersistence(element.Symbol));
-
-        private static Model.GroupElementProduct ToPersistence(Domain.GroupElementProduct product) =>
-            new Model.GroupElementProduct(product.Id, ToPersistence(product.First), ToPersistence(product.Second),
-                ToPersistence(product.Product));
     }
 }

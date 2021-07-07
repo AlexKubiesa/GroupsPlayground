@@ -33,7 +33,12 @@
         }
     }
 
-    public override bool Validate() => model.Validate();
+    public override bool Validate()
+    {
+        bool success = model.Validate();
+        StateHasChanged();
+        return success;
+    }
 
     public GroupElementSymbols Symbols => model.Result;
 }

@@ -6,6 +6,8 @@ namespace GroupsPlayground.Domain
 {
     public sealed class Symbol : ValueObject<Symbol>
     {
+        public static Symbol Create(string text) => string.IsNullOrEmpty(text) ? null : new Symbol(text);
+
         private static bool IsAllowedCharacter(char c) => char.IsLetterOrDigit(c) || char.IsSymbol(c);
 
         public Symbol(string text)
