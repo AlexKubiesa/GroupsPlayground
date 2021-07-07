@@ -11,7 +11,7 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
     {
         private readonly List<GroupOperationElementModel> elements = new();
 
-        public int ElementCount
+        public int GroupSize
         {
             get => Elements.Count;
             set

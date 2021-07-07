@@ -24,12 +24,12 @@
         </tr>
         </thead>
         <tbody>
-        @for (int rowIndex = 0; rowIndex < model.ElementCount; rowIndex++)
+        @for (int rowIndex = 0; rowIndex < model.GroupSize; rowIndex++)
         {
             var element = model.Elements[rowIndex];
             <tr>
                 <th>@element.Symbol</th>
-                @for (int columnIndex = 0; columnIndex < model.ElementCount; columnIndex++)
+                @for (int columnIndex = 0; columnIndex < model.GroupSize; columnIndex++)
                 {
                     var product = model.Products[rowIndex][columnIndex];
                     <td><InputText @bind-Value="product.Symbol"/></td>
@@ -50,12 +50,12 @@
         formContext = new EditContext(model);
     }
 
-    public int ElementCount
+    public int GroupSize
     {
-        get => model.ElementCount;
+        get => model.GroupSize;
         set
         {
-            model.ElementCount = value;
+            model.GroupSize = value;
             StateHasChanged();
         }
     }

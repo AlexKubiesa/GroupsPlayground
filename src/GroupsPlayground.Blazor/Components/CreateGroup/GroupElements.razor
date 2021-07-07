@@ -1,0 +1,31 @@
+﻿@inherits WizardStepContent
+
+<h3>Group elements</h3>
+
+<p>Choose group element symbols.</p>
+
+<EditForm Model="@model">
+    @for (int index = 0; index < model.Count; index++)
+    {
+        int readableIndex = index + 1;
+        var element = model.Elements[index];
+        <p>
+            <label for="@($"name{readableIndex}")">Element @readableIndex:</label><br />
+            <InputText id="@($"name{readableIndex}")" @bind-Value="@element.Symbol" /><br />
+        </p>
+    }
+</EditForm>    
+
+@code {
+    private readonly GroupElementsModel model = new();
+
+    public int GroupSize
+    {
+        get => model.Count;
+        set
+        {
+            model.Count = value;
+            StateHasChanged();
+        }
+    }
+}

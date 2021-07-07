@@ -13,6 +13,9 @@
             <GroupProperties @ref="groupProperties"/>
         </WizardStep>
         <WizardStep Index="1">
+            <GroupElements @ref="groupElements"/>
+        </WizardStep>
+        <WizardStep Index="2">
             <GroupOperation @ref="groupOperation"/>
         </WizardStep>
     </CascadingValue>
@@ -29,6 +32,7 @@
     private WizardStepContent step;
     private bool isLastStep;
     private GroupProperties groupProperties;
+    private GroupElements groupElements;
     private GroupOperation groupOperation;
 
     protected override void OnAfterRender(bool firstRender)
@@ -37,9 +41,10 @@
             return;
 
         steps.Add(groupProperties);
+        steps.Add(groupElements);
         steps.Add(groupOperation);
         stepIndex = 0;
-        step = steps[0];
+        UpdateStep();
     }
 
     public void OnBack()
@@ -61,7 +66,12 @@
 
         if (step == groupProperties)
         {
-            groupOperation.ElementCount = groupProperties.Size;
+            groupElements.GroupSize = groupProperties.Size;
+        }
+
+        if (step == groupElements)
+        {
+            groupOperation.GroupSize = groupProperties.Size;
         }
 
         if (step == groupOperation)
