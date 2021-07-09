@@ -10,7 +10,7 @@ namespace GroupsPlayground.Domain
         public static string ValidateName(string name) =>
             name switch
             {
-                { } valid when valid.All(char.IsLetterOrDigit) => null,
+                { } valid when valid.All(c => char.IsLetterOrDigit(c) || c == '_') => null,
                 var missing when string.IsNullOrEmpty(missing) => "Missing group name.",
                 _ => "Invalid characters in group name."
             };
@@ -63,6 +63,8 @@ namespace GroupsPlayground.Domain
                 name = value;
             }
         }
+
+        public int Size => Elements.Count;
 
         public IReadOnlyList<IGroupElement> Elements => elements;
 

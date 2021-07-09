@@ -1,17 +1,22 @@
-﻿@page "/GroupElementWorkspace"
-@using GroupsPlayground.Domain
-@using GroupsPlayground.Persistence
+﻿@page "/ViewGroup"
 @using Microsoft.AspNetCore.WebUtilities
+@using GroupsPlayground.Persistence
+@using GroupsPlayground.Domain
 @inject NavigationManager navigationManager
 
-<h1>Workspace@((group == null) ? string.Empty : (": " + group.Name))</h1>
+<h1>View group@((group == null) ? string.Empty : (": " + group.Name))</h1>
 
 @if (group != null)
 {
     <div>
-        @foreach (var element in group.Elements)
+        <h2>Size</h2>
+        <p>@group.Size</p>
+    </div>
+    <div>
+        <h2>Elements</h2>
+        @foreach (var element in @group.Elements)
         {
-            <button class="btn btn-primary">@element.Symbol</button>
+            <div class="btn btn-primary">@element.Symbol</div>
         }
     </div>
 }
@@ -22,7 +27,7 @@
     protected override void OnInitialized()
     {
         var query = QueryHelpers.ParseQuery(navigationManager.ToAbsoluteUri(navigationManager.Uri).Query);
-        if (!query.TryGetValue("group", out var idStringValues))
+        if (!query.TryGetValue("id", out var idStringValues))
             return;
         if (idStringValues.Count != 1)
             return;
@@ -32,5 +37,4 @@
         using Session session = new();
         group = session.GroupRepository.GetGroup(id);
     }
-
 }

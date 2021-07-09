@@ -1,29 +1,38 @@
 ﻿@page "/"
 @using GroupsPlayground.Persistence
 @using GroupsPlayground.Domain
+@using GroupsPlayground.Blazor.Framework
 @inject NavigationManager navigationManager
 
 <h1>Group library</h1>
 
-<div>
-    <select @bind="@selectedIndex" name="groups" size="5" style="width: 8em">
+<div style="padding: 8px">
+    <select @bind="@groupCursor.Index" name="groups" size="5" class="list-group">
         @for (int index = 0; index < groups.Count; index++)
         {
             var group = groups[index];
-            <option style="width: 50px" value="@index">@group.Name (@group.Elements.Count)</option>
+            <option value="@index" class="list-group-item">@group.Name (@group.Elements.Count)</option>
         }
     </select>
 </div>
 
-<button @onclick="@Create" class="btn btn-primary">Create</button>
-<button @onclick="@Remove" class="btn btn-primary" disabled="@groupSelected">Remove</button>
-<button @onclick="@Workspace" class="btn btn-primary" disabled="@groupSelected">Workspace</button>
+<div style="padding: 8px">
+    <button @onclick="@View" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">View</button>
+    <button @onclick="@Create" class="btn btn-primary">Create</button>
+    <button @onclick="@Remove" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">Remove</button>
+    <button @onclick="@Workspace" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">Workspace</button>
+</div>
 
 @code
 {
-    private List<Group> groups;
-    private int selectedIndex;
-    private bool groupSelected;
+    private readonly List<Group> groups;
+    private readonly Cursor<Group> groupCursor;
+
+    public Index()
+    {
+        groups = new List<Group>();
+        groupCursor = new Cursor<Group>(groups);
+    }
 
     protected override void OnInitialized()
     {
@@ -31,11 +40,21 @@
         RefreshGroups(session);
     }
 
+    private void View()
+    {
+        var group = groupCursor.GetItem();
+        if (group == null)
+            return;
+        navigationManager.NavigateTo($"/ViewGroup?id={group.Id:N}");
+    }
+
     private void Create() => navigationManager.NavigateTo("/CreateGroup");
 
     private void Remove()
     {
-        var group = groups[selectedIndex];
+        var group = groupCursor.GetItem();
+        if (group == null)
+            return;
         using Session session = new();
         session.GroupRepository.RemoveGroup(group);
         session.SaveChanges();
@@ -44,14 +63,15 @@
 
     private void Workspace()
     {
-        var group = groups[selectedIndex];
+        var group = groupCursor.GetItem();
+        if (group == null)
+            return;
         navigationManager.NavigateTo($"/GroupElementWorkspace?group={group.Id:N}");
     }
 
     private void RefreshGroups(Session session)
     {
-        groups = session.GroupRepository.GetAllGroups();
-        selectedIndex = 0;
-        groupSelected = groups.Any();
+        groups.Clear();
+        groups.AddRange(session.GroupRepository.GetAllGroups());
     }
 }
