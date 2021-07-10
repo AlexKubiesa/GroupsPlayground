@@ -1,0 +1,17 @@
+﻿@page "/CreateGroup"
+@inject NavigationManager navigationManager
+
+<h1>Create group</h1>
+
+<p>
+    How would you like to define the group?
+</p>
+
+<div>
+    <button class="btn btn-primary btn-lg" @onclick="@CayleyTable">Cayley table</button>
+    <button class="btn btn-primary btn-lg">Permutations</button>
+</div>
+
+@code {
+    private void CayleyTable() => navigationManager.NavigateTo("/CreateGroup/CayleyTable");
+}
