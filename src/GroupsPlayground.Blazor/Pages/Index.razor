@@ -18,9 +18,9 @@
 
 <div style="padding: 8px">
     <button @onclick="@View" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">View</button>
-    <button @onclick="@Create" class="btn btn-primary">Create</button>
-    <button @onclick="@Remove" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">Remove</button>
-    <button @onclick="@Workspace" class="btn btn-primary" disabled="@(!groupCursor.IsInRange())">Workspace</button>
+    <button @onclick="@Create" class="btn btn-secondary">Create</button>
+    <button @onclick="@Remove" class="btn btn-secondary" disabled="@(!groupCursor.IsInRange())">Remove</button>
+    <button @onclick="@Workspace" class="btn btn-secondary" disabled="@(!groupCursor.IsInRange())">Workspace</button>
 </div>
 
 @code

@@ -3,45 +3,48 @@
 @using Microsoft.AspNetCore.Components
 @using System.Text
 
-@inherits WizardStepContent
+@inherits WizardStep
 
-<h3>Cayley table</h3>
+@if (Visible)
+{
+    <h3>Cayley table</h3>
 
-<p>Define the group operation by filling in the Cayley table.</p>
+    <p>Define the group operation by filling in the Cayley table.</p>
 
-<EditForm EditContext="@formContext">
-    <p>
-        @model.ValidationMessage
-    </p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th></th>
-            @foreach (var element in model.Elements)
-            {
-                <th>@element.Symbol</th>
-            }
-        </tr>
-        </thead>
-        <tbody>
-        @for (int rowIndex = 0; rowIndex < model.Elements.Count; rowIndex++)
-        {
-            var element = model.Elements[rowIndex];
+    <EditForm EditContext="@formContext">
+        <p>
+            @model.ValidationMessage
+        </p>
+        <table class="table">
+            <thead>
             <tr>
-                <th>@element.Symbol</th>
-                @for (int columnIndex = 0; columnIndex < model.Elements.Count; columnIndex++)
+                <th></th>
+                @foreach (var element in model.Elements)
                 {
-                    var product = model.Products[rowIndex][columnIndex];
-                    <td><InputText @bind-Value="product.Symbol"/></td>
+                    <th>@element.Symbol</th>
                 }
             </tr>
-        }
-        </tbody>
-    </table>
-</EditForm>
+            </thead>
+            <tbody>
+            @for (int rowIndex = 0; rowIndex < model.Elements.Count; rowIndex++)
+            {
+                var element = model.Elements[rowIndex];
+                <tr>
+                    <th>@element.Symbol</th>
+                    @for (int columnIndex = 0; columnIndex < model.Elements.Count; columnIndex++)
+                    {
+                        var product = model.Products[rowIndex][columnIndex];
+                        <td><InputText @bind-Value="product.Symbol"/></td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </EditForm>
+}
 
 @code {
-    private GroupOperationModel model;
+private GroupOperationModel model;
     private EditContext formContext;
 
     protected override void OnInitialized()

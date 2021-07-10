@@ -1,27 +1,30 @@
 ﻿@using GroupsPlayground.Domain
-@inherits WizardStepContent
+@inherits WizardStep
 
-<h3>Group elements</h3>
+@if (Visible)
+{
+    <h3>Group elements</h3>
 
-<p>Choose group element symbols.</p>
+    <p>Choose group element symbols.</p>
 
-<EditForm Model="@model">
-    <p>
-        @model.ValidationMessage
-    </p>
-    @for (int index = 0; index < model.Count; index++)
-    {
-        int readableIndex = index + 1;
-        var element = model.Elements[index];
+    <EditForm Model="@model">
         <p>
-            <label for="@($"name{readableIndex}")">Element @readableIndex:</label><br />
-            <InputText id="@($"name{readableIndex}")" @bind-Value="@element.Symbol" /><br />
+            @model.ValidationMessage
         </p>
-    }
-</EditForm>    
+        @for (int index = 0; index < model.Count; index++)
+        {
+            int readableIndex = index + 1;
+            var element = model.Elements[index];
+            <p>
+                <label for="@($"name{readableIndex}")">Element @readableIndex:</label><br/>
+                <InputText id="@($"name{readableIndex}")" @bind-Value="@element.Symbol"/><br/>
+            </p>
+        }
+    </EditForm>
+}
 
 @code {
-    private readonly GroupElementsModel model = new();
+private readonly GroupElementsModel model = new();
 
     public int GroupSize
     {

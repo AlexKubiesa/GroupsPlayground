@@ -1,19 +1,15 @@
-﻿<style>
-    .hide {
-        display: none
+﻿@code {
+    private bool visible;
+
+    public bool Visible
+    {
+        get => visible;
+        set
+        {
+            visible = value;
+            StateHasChanged();
+        }
     }
-</style>
 
-<div class="@((Index == WizardIndex) ? "show" : "hide")">@ChildContent</div>
-    
-
-@code {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
-
-    [Parameter]
-    public int Index { get; set; }
-
-    [CascadingParameter]
-    public int WizardIndex { get; set; }
+    public virtual bool Validate() => true;
 }

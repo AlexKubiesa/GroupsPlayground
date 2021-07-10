@@ -8,17 +8,9 @@
 <h1>Create new group</h1>
 
 <div>
-    <CascadingValue Value="@stepIndex">
-        <WizardStep Index="0">
-            <GroupProperties @ref="groupProperties"/>
-        </WizardStep>
-        <WizardStep Index="1">
-            <GroupElements @ref="groupElements"/>
-        </WizardStep>
-        <WizardStep Index="2">
-            <GroupOperation @ref="groupOperation"/>
-        </WizardStep>
-    </CascadingValue>
+    <GroupProperties @ref="groupProperties"/>
+    <GroupElements @ref="groupElements"/>
+    <GroupOperation @ref="groupOperation"/>
 </div>
 <div>
     @if (isFirstStep)
@@ -42,9 +34,9 @@
 
 
 @code {
-    private readonly List<WizardStepContent> steps = new();
+    private readonly List<WizardStep> steps = new();
     private int stepIndex;
-    private WizardStepContent step;
+    private WizardStep step;
     private bool isFirstStep = true;
     private bool isLastStep;
     private GroupProperties groupProperties;
@@ -61,6 +53,7 @@
         steps.Add(groupOperation);
         stepIndex = 0;
         UpdateStep();
+        step.Visible = true;
     }
 
     public void OnCancel() => Redirect();
@@ -75,6 +68,8 @@
     {
         if (!step.Validate())
             return;
+
+        step.Visible = false;
 
         if (step == groupProperties)
         {
@@ -95,6 +90,7 @@
 
         stepIndex++;
         UpdateStep();
+        step.Visible = true;
     }
 
     private void Redirect() => navigationManager.NavigateTo("/");

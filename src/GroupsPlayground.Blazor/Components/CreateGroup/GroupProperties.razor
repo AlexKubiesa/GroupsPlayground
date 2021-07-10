@@ -1,19 +1,22 @@
-﻿@inherits WizardStepContent
+﻿@inherits WizardStep
 
-<h3>Group properties</h3>
+@if (Visible)
+{
+    <h3>Group properties</h3>
 
-<EditForm EditContext="@formContext">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <p>
-        <label for="name">Name:</label><br />
-        <InputText id="name" @bind-Value="model.Name" /><br />
-    </p>
-    <p>
-        <label for="size">Size:</label><br />
-        <InputNumber id="size" @bind-Value="model.Size"></InputNumber><br />
-    </p>
-</EditForm>
+    <EditForm EditContext="@formContext">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <p>
+            <label for="name">Name:</label><br/>
+            <InputText id="name" @bind-Value="model.Name"/><br/>
+        </p>
+        <p>
+            <label for="size">Size:</label><br/>
+            <InputNumber id="size" @bind-Value="model.Size"></InputNumber><br/>
+        </p>
+    </EditForm>
+}
 
 @code {
     private GroupPropertiesModel model;
