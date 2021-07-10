@@ -9,9 +9,10 @@
 
 <div>
     <button class="btn btn-primary btn-lg" @onclick="@CayleyTable">Cayley table</button>
-    <button class="btn btn-primary btn-lg">Permutations</button>
+    <button class="btn btn-primary btn-lg" @onclick="@Permutations">Permutations</button>
 </div>
 
 @code {
     private void CayleyTable() => navigationManager.NavigateTo("/CreateGroup/CayleyTable");
+    private void Permutations() => navigationManager.NavigateTo("/CreateGroup/Permutations");
 }

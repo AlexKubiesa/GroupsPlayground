@@ -1,0 +1,77 @@
+﻿@page "/CreateGroup/Permutations"
+@using GroupsPlayground.Blazor.Components.CreateGroup
+@inject NavigationManager navigationManager
+
+<h1>Create group</h1>
+
+<div>
+    <PermutationGenerators @ref="permutationGenerators" />
+</div>
+<div>
+    @if (isFirstStep)
+    {
+        <button type="button" @onclick="@OnCancel" class="btn">Cancel</button>
+    }
+    else
+    {
+        <button type="button" @onclick="@OnBack" class="btn">Back</button>
+    }
+
+    @if (isLastStep)
+    {
+        <button type="button" @onclick="@OnNext" class="btn btn-primary">Finish</button>
+    }
+    else
+    {
+        <button type="button" @onclick="@OnNext" class="btn btn-outline-primary">Next</button>
+    }
+</div>
+
+@code {
+    private readonly List<WizardStep> steps = new();
+    private int stepIndex;
+    private WizardStep step;
+    private bool isFirstStep = true;
+    private bool isLastStep;
+    private PermutationGenerators permutationGenerators;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        steps.Add(permutationGenerators);
+        stepIndex = 0;
+        UpdateStep();
+        step.Visible = true;
+    }
+
+    public void OnCancel() => Redirect();
+
+    public void OnBack()
+    {
+        stepIndex--;
+        UpdateStep();
+    }
+
+    public void OnNext()
+    {
+        if (!step.Validate())
+            return;
+
+        step.Visible = false;
+
+        stepIndex++;
+        UpdateStep();
+        step.Visible = true;
+    }
+
+    private void Redirect() => navigationManager.NavigateTo("/");
+
+    private void UpdateStep()
+    {
+        step = steps[stepIndex];
+        isFirstStep = (stepIndex == 0);
+        isLastStep = (stepIndex == (steps.Count - 1));
+    }
+}

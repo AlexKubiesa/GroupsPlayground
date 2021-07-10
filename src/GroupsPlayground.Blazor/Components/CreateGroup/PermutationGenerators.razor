@@ -1,0 +1,38 @@
+﻿@inherits WizardStep
+
+@if (Visible)
+{
+    <h3>Choose generators</h3>
+
+    <p>Write down a set of generators in disjoint cycle notation.</p>
+
+    <EditForm Model="@model">
+        <div>
+            <label for="NumberOfGenerators">Number of generators:</label><br/>
+            <InputNumber id="NumberOfGenerators" @bind-Value="@model.GeneratorCount"></InputNumber>
+        </div><br/>
+        @for (int index = 0; index < model.Generators.Count; index++)
+        {
+            int readableIndex = index + 1;
+            var generator = model.Generators[index];
+            <div>
+                <label for="@($"name{readableIndex}")">Generator @readableIndex:</label><br/>
+                <InputText id="@($"name{readableIndex}")" @bind-Value="@generator.Expression"/>
+                <div>
+                    @generator.ValidationMessage
+                </div> <br/>
+            </div>
+        }
+    </EditForm>
+}
+
+@code {
+    private readonly PermutationGeneratorsModel model = new();
+
+    public override bool Validate()
+    {
+        bool success = model.Validate();
+        StateHasChanged();
+        return success;
+    }
+}
