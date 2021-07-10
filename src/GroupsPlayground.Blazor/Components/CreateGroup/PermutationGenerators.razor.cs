@@ -38,7 +38,21 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
 
         public bool Validate()
         {
-            throw new NotImplementedException();
+            ValidationMessage = null;
+            Result = null;
+
+            try
+            {
+                Result = Permutation.Parse(Expression);
+                return true;
+            }
+            catch (ValidationError e)
+            {
+                ValidationMessage = e.Message;
+                return false;
+            }
         }
+
+        public Permutation Result { get; private set; }
     }
 }
