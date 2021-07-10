@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Persistence.Model
 {
-    public sealed class Group : AggregateRoot
+    public abstract class Group : Entity
     {
-        public Group(Guid id) : base(id)
+        protected Group(Guid id, string name) : base(id)
         {
+            Name = name;
         }
 
-        public string Name { get; set; }
-
-        public IReadOnlyList<GroupElement> Elements { get; set; }
-
-        public IReadOnlyCollection<GroupElementProduct> Products { get; set; }
+        public string Name { get; }
     }
 }

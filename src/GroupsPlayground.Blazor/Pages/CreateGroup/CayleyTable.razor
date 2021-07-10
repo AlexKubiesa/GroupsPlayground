@@ -107,7 +107,7 @@
     private async Task DoCreateGroup()
     {
         using Session session = new();
-        Group group = new(Guid.NewGuid(), groupProperties.Name, groupOperation.CayleyTable);
+        CayleyTableGroup group = new(Guid.NewGuid(), groupProperties.Name, groupOperation.CayleyTable);
         await session.GroupRepository.AddGroupAsync(group);
         session.SaveChanges();
     }

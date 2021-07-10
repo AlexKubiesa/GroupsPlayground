@@ -22,11 +22,6 @@ namespace GroupsPlayground.Persistence
         public List<Group> GetAllGroups()
         {
             var groups = context.Groups.ToList();
-            if (groups.Count > 0)
-            {
-                context.Entry(groups[0]).Collection(x => x.Elements).Load();
-            }
-
             return groups.Select(GroupMapper.ToDomain).ToList();
         }
 

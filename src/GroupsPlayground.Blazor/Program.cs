@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GroupsPlayground.Persistence;
 
 namespace GroupsPlayground.Blazor
 {
@@ -13,6 +14,11 @@ namespace GroupsPlayground.Blazor
     {
         public static void Main(string[] args)
         {
+            using (Session session = new())
+            {
+                session.RegenerateDatabase();
+            }
+
             CreateHostBuilder(args).Build().Run();
         }
 

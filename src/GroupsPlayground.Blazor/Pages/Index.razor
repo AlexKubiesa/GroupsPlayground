@@ -11,7 +11,7 @@
         @for (int index = 0; index < groups.Count; index++)
         {
             var group = groups[index];
-            <option value="@index" class="list-group-item">@group.Name (@group.Elements.Count)</option>
+            <option value="@index" class="list-group-item">@group.Name (@group.Size)</option>
         }
     </select>
 </div>

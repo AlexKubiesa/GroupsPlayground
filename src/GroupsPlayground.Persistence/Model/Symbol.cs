@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Persistence.Model
 {

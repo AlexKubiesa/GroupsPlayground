@@ -17,7 +17,7 @@
 }
 
 @code {
-    private Group group;
+    private CayleyTableGroup group;
 
     protected override void OnInitialized()
     {
@@ -30,7 +30,7 @@
         if (!Guid.TryParse(idString, out var id))
             return;
         using Session session = new();
-        group = session.GroupRepository.GetGroup(id);
+        group = session.GroupRepository.GetGroup(id) as CayleyTableGroup;
     }
 
 }
