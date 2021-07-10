@@ -5,7 +5,8 @@
 <h1>Create group</h1>
 
 <div>
-    <PermutationGenerators @ref="permutationGenerators" />
+    <PermutationGenerators @ref="permutationGenerators"/>
+    <GroupName @ref="groupName"/>
 </div>
 <div>
     @if (isFirstStep)
@@ -34,6 +35,7 @@
     private bool isFirstStep = true;
     private bool isLastStep;
     private PermutationGenerators permutationGenerators;
+    private GroupName groupName;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -41,6 +43,7 @@
             return;
 
         steps.Add(permutationGenerators);
+        steps.Add(groupName);
         stepIndex = 0;
         UpdateStep();
         step.Visible = true;
@@ -50,8 +53,10 @@
 
     public void OnBack()
     {
+        step.Visible = false;
         stepIndex--;
         UpdateStep();
+        step.Visible = true;
     }
 
     public void OnNext()

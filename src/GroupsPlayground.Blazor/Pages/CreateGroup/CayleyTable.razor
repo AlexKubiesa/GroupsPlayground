@@ -60,8 +60,10 @@
 
     public void OnBack()
     {
+        step.Visible = false;
         stepIndex--;
         UpdateStep();
+        step.Visible = true;
     }
 
     public async Task OnNext()

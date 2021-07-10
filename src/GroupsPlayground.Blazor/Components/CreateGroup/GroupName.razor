@@ -1,0 +1,34 @@
+﻿@inherits WizardStep
+
+@if (Visible)
+{
+    <h3>Group name</h3>
+
+    <p>
+        Choose a name for the group.
+    </p>
+
+    <EditForm EditContext="@formContext">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <p>
+            <label for="name">Name:</label><br/>
+            <InputText id="name" @bind-Value="model.Name"/><br/>
+        </p>
+    </EditForm>
+}
+
+@code {
+    private GroupNameModel model;
+    private EditContext formContext;
+
+    protected override void OnInitialized()
+    {
+        model = new GroupNameModel();
+        formContext = new EditContext(model);
+    }
+
+    public string Name => model.Name;
+
+    public override bool Validate() => formContext.Validate();
+}
