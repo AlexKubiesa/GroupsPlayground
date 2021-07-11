@@ -13,5 +13,10 @@ namespace GroupsPlayground.Domain
 
         public ValueList<Permutation> Generators { get; }
         public override int? Size { get; }
+
+        public override void ComputeSize()
+        {
+            base.ComputeSize();
+        }
     }
 }

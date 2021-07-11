@@ -9,7 +9,7 @@ namespace GroupsPlayground.Domain.Internal
             new Permutation(permutationContext.cycle().Select(Evaluate).ToValueList());
 
         public static Cycle Evaluate(PermutationGrammarParser.CycleContext cycleContext) =>
-            new Cycle(cycleContext.number().Select(Evaluate).ToValueList());
+            new Cycle(cycleContext.number().Select(Evaluate).ToList());
 
         public static int Evaluate(PermutationGrammarParser.NumberContext numberContext) =>
             int.Parse(numberContext.GetText());

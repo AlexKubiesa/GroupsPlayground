@@ -33,5 +33,9 @@ namespace GroupsPlayground.Domain
         }
 
         public abstract int? Size { get; }
+
+        public virtual void ComputeSize()
+        {
+        }
     }
 }

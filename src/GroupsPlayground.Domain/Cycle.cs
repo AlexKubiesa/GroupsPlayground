@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
@@ -8,9 +9,19 @@ namespace GroupsPlayground.Domain
     {
         private readonly ValueList<int> elements;
 
-        public Cycle(ValueList<int> elements)
+        public Cycle(IList<int> elements)
         {
-            this.elements = elements ?? throw new ArgumentNullException(nameof(elements));
+            if (elements == null)
+                throw new ArgumentNullException(nameof(elements));
+
+            if (!elements.AreDistinct())
+                throw new ValidationError("Elements in a cycle must be distinct.");
+
+            // Ensure that the smallest element of the cycle is at the start.
+            int min = elements.Min();
+            int minIndex = elements.IndexOf(min);
+            elements.RotateLeft(minIndex);
+            this.elements = elements.ToValueList();
         }
 
         protected override bool EqualsInternal(Cycle other) => elements.Equals(other.elements);
