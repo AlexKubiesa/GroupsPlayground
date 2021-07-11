@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Antlr4.Runtime;
 using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Internal;
@@ -36,5 +37,7 @@ namespace GroupsPlayground.Domain
         protected override bool EqualsInternal(Permutation other) => cycles.Equals(other.cycles);
 
         protected override int GetHashCodeInternal() => cycles.GetHashCode();
+
+        public override string ToString() => '(' + string.Concat(cycles.Select(x => x.ToString())) + ')';
     }
 }

@@ -92,7 +92,7 @@
     private async Task DoCreateGroup()
     {
         using Session session = new();
-        PermutationGroup group = new(Guid.NewGuid(), groupName.Name, null);
+        PermutationGroup group = new(Guid.NewGuid(), groupName.Name, permutationGenerators.Generators, null);
         await session.GroupRepository.AddGroupAsync(group);
         session.SaveChanges();
     }

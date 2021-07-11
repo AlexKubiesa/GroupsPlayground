@@ -32,7 +32,7 @@ namespace GroupsPlayground.Persistence.Mapping
         }
 
         public static Domain.PermutationGroup ToDomain(Model.PermutationGroup group) =>
-            new Domain.PermutationGroup(@group.Id, @group.Name, @group.Size);
+            new Domain.PermutationGroup(@group.Id, @group.Name, group.Generators.Select(PermutationMapper.ToDomain).ToValueList(), @group.Size);
 
         public static Model.Group ToPersistence(Domain.Group group) =>
             @group switch
@@ -60,7 +60,11 @@ namespace GroupsPlayground.Persistence.Mapping
         }
 
         public static Model.PermutationGroup ToPersistence(Domain.PermutationGroup group) =>
-            new Model.PermutationGroup(@group.Id, group.Name);
+            new Model.PermutationGroup(@group.Id, group.Name)
+            {
+                Size = group.Size,
+                Generators = group.Generators.Select(PermutationMapper.ToPersistence).ToArray()
+            };
 
         private static Model.GroupElement ToPersistence(Domain.IGroupElement element) =>
             new Model.GroupElement(element.Id, SymbolMapper.ToPersistence(element.Symbol));

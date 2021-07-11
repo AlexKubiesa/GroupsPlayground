@@ -36,7 +36,8 @@ namespace GroupsPlayground.Persistence
             modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.Second).WithMany();
             modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.Product).WithMany();
 
-            modelBuilder.Entity<PermutationGroup>().HasMany<Permutation>().WithOne();
+            modelBuilder.Entity<PermutationGroup>().HasMany(x => x.Generators).WithOne();
+            modelBuilder.Entity<PermutationGroup>().Navigation(x => x.Generators).AutoInclude();
 
             modelBuilder.Entity<Permutation>().HasKey(x => x.Id);
             modelBuilder.Entity<Permutation>().Property(x => x.Expression);

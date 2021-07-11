@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain
@@ -15,5 +16,7 @@ namespace GroupsPlayground.Domain
         protected override bool EqualsInternal(Cycle other) => elements.Equals(other.elements);
 
         protected override int GetHashCodeInternal() => elements.GetHashCode();
+
+        public override string ToString() => string.Join(',', elements.Select(x => x.ToString()));
     }
 }

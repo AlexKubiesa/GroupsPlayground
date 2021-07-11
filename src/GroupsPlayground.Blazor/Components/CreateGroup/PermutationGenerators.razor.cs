@@ -27,7 +27,20 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
 
         public IReadOnlyList<PermutationGeneratorModel> Generators => generators;
 
-        public bool Validate() => generators.Select(x => x.Validate()).ToList().All(x => x);
+        public ValueList<Permutation> Result { get; private set; }
+
+        public bool Validate()
+        {
+            Result = null;
+
+            bool success = generators.Select(x => x.Validate()).ToList().All(x => x);
+            if (success)
+            {
+                Result = generators.Select(x => x.Result).ToValueList();
+            }
+
+            return success;
+        }
     }
 
     public class PermutationGeneratorModel
@@ -35,6 +48,8 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
         public string Expression { get; set; }
 
         public string ValidationMessage { get; private set; }
+
+        public Permutation Result { get; private set; }
 
         public bool Validate()
         {
@@ -52,7 +67,5 @@ namespace GroupsPlayground.Blazor.Components.CreateGroup
                 return false;
             }
         }
-
-        public Permutation Result { get; private set; }
     }
 }

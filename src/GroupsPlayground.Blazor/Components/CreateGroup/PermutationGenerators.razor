@@ -1,4 +1,6 @@
-﻿@inherits WizardStep
+﻿@using GroupsPlayground.Domain.Framework
+@using GroupsPlayground.Domain
+@inherits WizardStep
 
 @if (Visible)
 {
@@ -28,6 +30,8 @@
 
 @code {
     private readonly PermutationGeneratorsModel model = new();
+
+    public ValueList<Permutation> Generators => model.Result;
 
     public override bool Validate()
     {
