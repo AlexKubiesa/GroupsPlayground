@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GroupsPlayground.Persistence;
 using GroupsPlayground.Persistence.Groups;
+using GroupsPlayground.Persistence.Quests;
 
 namespace GroupsPlayground.Blazor
 {
@@ -15,9 +16,15 @@ namespace GroupsPlayground.Blazor
     {
         public static void Main(string[] args)
         {
-            using (Session session = new())
+            using (DatabaseSession session = new())
             {
                 session.RegenerateDatabase();
+            }
+
+            using (QuestsSession session = new())
+            {
+                session.EnsureReferenceData();
+                session.SaveChanges();
             }
 
             CreateHostBuilder(args).Build().Run();

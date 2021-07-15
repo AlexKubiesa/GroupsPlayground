@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Quests;
+using GroupsPlayground.Persistence.Common;
 using GroupsPlayground.Persistence.Quests.Mapping;
 
 namespace GroupsPlayground.Persistence.Quests
 {
     public sealed class QuestRepository
     {
-        private readonly QuestsDbContext context;
+        private readonly AppDbContext context;
 
-        internal QuestRepository(QuestsDbContext context)
+        internal QuestRepository(AppDbContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }

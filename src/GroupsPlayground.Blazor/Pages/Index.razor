@@ -38,7 +38,7 @@
 
     protected override void OnInitialized()
     {
-        using Session session = new();
+        using GroupsSession session = new();
         RefreshGroups(session);
     }
 
@@ -57,7 +57,7 @@
         var group = groupCursor.GetItem();
         if (group == null)
             return;
-        using Session session = new();
+        using GroupsSession session = new();
         session.GroupRepository.RemoveGroup(group);
         session.SaveChanges();
         RefreshGroups(session);
@@ -71,7 +71,7 @@
         navigationManager.NavigateTo($"/GroupElementWorkspace?group={group.Id:N}");
     }
 
-    private void RefreshGroups(Session session)
+    private void RefreshGroups(GroupsSession session)
     {
         groups.Clear();
         groups.AddRange(session.GroupRepository.GetAllGroups());

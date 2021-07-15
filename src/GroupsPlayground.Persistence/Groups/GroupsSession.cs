@@ -1,23 +1,18 @@
 ﻿using System;
+using GroupsPlayground.Persistence.Common;
 
 namespace GroupsPlayground.Persistence.Groups
 {
-    public class Session : IDisposable
+    public class GroupsSession : IDisposable
     {
-        private readonly GroupsDbContext context = new GroupsDbContext();
+        private readonly AppDbContext context = new AppDbContext();
 
-        public Session()
+        public GroupsSession()
         {
             GroupRepository = new GroupRepository(context);
         }
 
         public GroupRepository GroupRepository { get; }
-
-        public void RegenerateDatabase()
-        {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-        }
 
         public void Dispose() => context?.Dispose();
 

@@ -6,7 +6,7 @@ namespace GroupsPlayground.Persistence.Framework
     {
         protected Entity(Guid id) => Id = id;
 
-        public virtual Guid Id { get; }
+        public virtual Guid Id { get; private set; }
 
         public override bool Equals(object obj)
         {

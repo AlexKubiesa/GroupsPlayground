@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GroupsPlayground.Domain.Groups;
+using GroupsPlayground.Persistence.Common;
 using GroupsPlayground.Persistence.Groups.Mapping;
 
 namespace GroupsPlayground.Persistence.Groups
 {
     public sealed class GroupRepository
     {
-        private readonly GroupsDbContext context;
+        private readonly AppDbContext context;
 
-        internal GroupRepository(GroupsDbContext context)
+        internal GroupRepository(AppDbContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
