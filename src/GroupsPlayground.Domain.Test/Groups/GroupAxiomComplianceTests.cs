@@ -3,7 +3,7 @@ using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Groups;
 using NUnit.Framework;
 
-namespace GroupsPlayground.Domain.Test
+namespace GroupsPlayground.Domain.Test.Groups
 {
     [TestFixture]
     public class GroupAxiomComplianceTests
