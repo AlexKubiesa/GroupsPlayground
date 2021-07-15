@@ -1,7 +1,25 @@
 ﻿@page "/Quests"
+@using GroupsPlayground.Domain.Quests
+@using GroupsPlayground.Persistence.Quests
 
 <h1>Quests</h1>
 
-@code {
+<ul>
+    @foreach (var quest in quests)
+    {
+        <li>
+            <input type="checkbox" value="@quest.Complete" disabled/>
+            @quest.Description
+        </li>
+    }
+</ul>
 
+@code {
+    private List<Quest> quests = new();
+
+    protected override void OnInitialized()
+    {
+        using QuestsSession session = new();
+        quests = session.QuestRepository.GetAllQuests();
+    }
 }
