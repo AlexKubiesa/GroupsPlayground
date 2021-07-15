@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain.Internal
+namespace GroupsPlayground.Domain.Groups.Internal
 {
     internal static class PermutationEvaluator
     {

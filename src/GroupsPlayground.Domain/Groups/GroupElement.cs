@@ -1,7 +1,7 @@
 ﻿using System;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     internal sealed class GroupElement : Entity, IGroupElement
     {

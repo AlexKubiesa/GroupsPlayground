@@ -1,9 +1,11 @@
-﻿namespace GroupsPlayground.Persistence.Mapping
+﻿using GroupsPlayground.Domain.Groups;
+
+namespace GroupsPlayground.Persistence.Mapping
 {
     public static class SymbolMapper
     {
-        public static Domain.Symbol ToDomain(Model.Symbol symbol) => new Domain.Symbol(symbol.Text);
+        public static Symbol ToDomain(Model.Symbol symbol) => new Symbol(symbol.Text);
 
-        public static Model.Symbol ToPersistence(Domain.Symbol symbol) => new Model.Symbol(symbol.Text);
+        public static Model.Symbol ToPersistence(Symbol symbol) => new Model.Symbol(symbol.Text);
     }
 }

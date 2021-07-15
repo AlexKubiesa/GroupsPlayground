@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GroupsPlayground.Domain.Framework;
+using GroupsPlayground.Domain.Groups;
 using NUnit.Framework;
 // ReSharper disable InconsistentNaming
 

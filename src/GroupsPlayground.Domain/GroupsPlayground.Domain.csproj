@@ -12,10 +12,4 @@
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Internal\PermutationGrammar.g4">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
-
 </Project>

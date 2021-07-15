@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
+using GroupsPlayground.Domain.Groups;
 
 namespace GroupsPlayground.Persistence.Mapping
 {
     public static class GroupMapper
     {
-        public static Domain.Group ToDomain(Model.Group group) =>
+        public static Group ToDomain(Model.Group group) =>
             @group switch
             {
                 Model.CayleyTableGroup cayleyTableGroup => ToDomain(cayleyTableGroup),
@@ -15,12 +16,12 @@ namespace GroupsPlayground.Persistence.Mapping
                 _ => throw new ArgumentOutOfRangeException(nameof(@group))
             };
 
-        public static Domain.CayleyTableGroup ToDomain(Model.CayleyTableGroup group)
+        public static CayleyTableGroup ToDomain(Model.CayleyTableGroup group)
         {
             var symbols =
-                new Domain.GroupElementSymbols(group.Elements.Select(x => SymbolMapper.ToDomain(x.Symbol)).ToValueList());
+                new GroupElementSymbols(group.Elements.Select(x => SymbolMapper.ToDomain(x.Symbol)).ToValueList());
 
-            var cayleyTable = new Domain.CayleyTable(Guid.NewGuid(), symbols);
+            var cayleyTable = new CayleyTable(Guid.NewGuid(), symbols);
             foreach (var product in group.Products)
             {
                 int row = cayleyTable.Symbols.IndexOf(SymbolMapper.ToDomain(product.First.Symbol));
@@ -28,21 +29,21 @@ namespace GroupsPlayground.Persistence.Mapping
                 cayleyTable.Products[row][column] = SymbolMapper.ToDomain(product.Product.Symbol);
             }
 
-            return new Domain.CayleyTableGroup(group.Id, group.Name, cayleyTable);
+            return new CayleyTableGroup(group.Id, group.Name, cayleyTable);
         }
 
-        public static Domain.PermutationGroup ToDomain(Model.PermutationGroup group) =>
-            new Domain.PermutationGroup(@group.Id, @group.Name, group.Generators.Select(PermutationMapper.ToDomain).ToValueList(), @group.Size);
+        public static PermutationGroup ToDomain(Model.PermutationGroup group) =>
+            new PermutationGroup(@group.Id, @group.Name, group.Generators.Select(PermutationMapper.ToDomain).ToValueList(), @group.Size);
 
-        public static Model.Group ToPersistence(Domain.Group group) =>
+        public static Model.Group ToPersistence(Group group) =>
             @group switch
             {
-                Domain.CayleyTableGroup cayleyTableGroup => ToPersistence(cayleyTableGroup),
-                Domain.PermutationGroup permutationGroup => ToPersistence(permutationGroup),
+                CayleyTableGroup cayleyTableGroup => ToPersistence(cayleyTableGroup),
+                PermutationGroup permutationGroup => ToPersistence(permutationGroup),
                 _ => throw new ArgumentOutOfRangeException(nameof(@group))
             };
 
-        public static Model.CayleyTableGroup ToPersistence(Domain.CayleyTableGroup group)
+        public static Model.CayleyTableGroup ToPersistence(CayleyTableGroup group)
         {
             var elements = group.Elements.ToDictionary(x => x, ToPersistence);
             var products = new List<Model.GroupElementProduct>(group.Elements.Count * group.Elements.Count);
@@ -59,14 +60,14 @@ namespace GroupsPlayground.Persistence.Mapping
             };
         }
 
-        public static Model.PermutationGroup ToPersistence(Domain.PermutationGroup group) =>
+        public static Model.PermutationGroup ToPersistence(PermutationGroup group) =>
             new Model.PermutationGroup(@group.Id, group.Name)
             {
                 Size = group.Size,
                 Generators = group.Generators.Select(PermutationMapper.ToPersistence).ToArray()
             };
 
-        private static Model.GroupElement ToPersistence(Domain.IGroupElement element) =>
+        private static Model.GroupElement ToPersistence(IGroupElement element) =>
             new Model.GroupElement(element.Id, SymbolMapper.ToPersistence(element.Symbol));
     }
 }

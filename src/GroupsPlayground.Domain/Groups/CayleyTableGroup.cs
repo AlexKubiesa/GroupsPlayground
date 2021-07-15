@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public sealed class CayleyTableGroup : Group
     {

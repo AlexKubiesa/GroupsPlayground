@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using GroupsPlayground.Persistence
 @using GroupsPlayground.Domain
+@using GroupsPlayground.Domain.Groups
 @inject NavigationManager navigationManager
 
 <h1>View group@((group == null) ? string.Empty : (": " + group.Name))</h1>

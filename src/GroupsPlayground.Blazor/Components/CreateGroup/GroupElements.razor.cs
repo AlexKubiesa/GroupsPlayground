@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GroupsPlayground.Domain;
 using GroupsPlayground.Domain.Framework;
+using GroupsPlayground.Domain.Groups;
 
 namespace GroupsPlayground.Blazor.Components.CreateGroup
 {

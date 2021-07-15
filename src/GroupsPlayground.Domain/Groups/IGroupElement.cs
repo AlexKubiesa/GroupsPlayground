@@ -1,6 +1,6 @@
 ﻿using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public interface IGroupElement : IEntity
     {

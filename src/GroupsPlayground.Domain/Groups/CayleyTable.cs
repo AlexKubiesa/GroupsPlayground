@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public sealed class CayleyTable : AggregateRoot
     {
@@ -40,6 +40,6 @@ namespace GroupsPlayground.Domain
         public IReadOnlyList<Symbol[]> Products => products;
 
         public BinaryOperation GetBinaryOperation() =>
-            new BinaryOperation(symbols.ToValueList(), Products.Select(x => x.ToValueList()).ToValueList());
+            new BinaryOperation(symbols.ToValueList(), Products.Select(x => ValueListExtensions.ToValueList<Symbol>(x)).ToValueList());
     }
 }

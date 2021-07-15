@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public class GroupElementSymbols : ValueObject<GroupElementSymbols>, IReadOnlyList<Symbol>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public sealed class Cycle : ValueObject<Cycle>
     {

@@ -3,9 +3,11 @@ using System.IO;
 using System.Linq;
 using Antlr4.Runtime;
 using GroupsPlayground.Domain.Framework;
-using GroupsPlayground.Domain.Internal;
+using GroupsPlayground.Domain.Groups.Internal;
+using PermutationGrammarLexer = GroupsPlayground.Domain.Groups.Internal.PermutationGrammarLexer;
+using PermutationGrammarParser = GroupsPlayground.Domain.Groups.Internal.PermutationGrammarParser;
 
-namespace GroupsPlayground.Domain
+namespace GroupsPlayground.Domain.Groups
 {
     public sealed class Permutation : ValueObject<Permutation>
     {
