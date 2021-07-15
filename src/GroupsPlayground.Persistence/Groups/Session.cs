@@ -1,7 +1,6 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 
-namespace GroupsPlayground.Persistence
+namespace GroupsPlayground.Persistence.Groups
 {
     public class Session : IDisposable
     {

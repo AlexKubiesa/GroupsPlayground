@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace GroupsPlayground.Persistence.Model
+namespace GroupsPlayground.Persistence.Groups.Model
 {
     public class CayleyTableGroup : Group
     {

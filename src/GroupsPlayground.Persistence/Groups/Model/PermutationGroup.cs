@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GroupsPlayground.Persistence.Model
+namespace GroupsPlayground.Persistence.Groups.Model
 {
     public sealed class PermutationGroup : Group
     {

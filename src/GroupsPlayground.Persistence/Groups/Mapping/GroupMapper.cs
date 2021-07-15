@@ -4,7 +4,7 @@ using System.Linq;
 using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Groups;
 
-namespace GroupsPlayground.Persistence.Mapping
+namespace GroupsPlayground.Persistence.Groups.Mapping
 {
     public static class GroupMapper
     {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using GroupsPlayground.Persistence.Framework;
 
-namespace GroupsPlayground.Persistence.Model
+namespace GroupsPlayground.Persistence.Groups.Model
 {
     public sealed class Symbol : ValueObject<Symbol>
     {

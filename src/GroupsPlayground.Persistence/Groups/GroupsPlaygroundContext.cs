@@ -1,10 +1,8 @@
-﻿using System;
-using GroupsPlayground.Domain.Framework;
-using GroupsPlayground.Persistence.Model;
+﻿using GroupsPlayground.Persistence.Framework;
+using GroupsPlayground.Persistence.Groups.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace GroupsPlayground.Persistence
+namespace GroupsPlayground.Persistence.Groups
 {
     internal sealed class GroupsPlaygroundContext : DbContext
     {

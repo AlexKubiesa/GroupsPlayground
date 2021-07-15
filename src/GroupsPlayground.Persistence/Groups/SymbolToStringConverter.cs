@@ -1,7 +1,7 @@
-﻿using GroupsPlayground.Persistence.Model;
+﻿using GroupsPlayground.Persistence.Groups.Model;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GroupsPlayground.Persistence
+namespace GroupsPlayground.Persistence.Groups
 {
     public class SymbolToStringConverter : ValueConverter<Symbol, string>
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace GroupsPlayground.Persistence
+namespace GroupsPlayground.Persistence.Framework
 {
     public static class ModelBuilderExtensions
     {

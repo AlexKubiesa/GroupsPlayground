@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using GroupsPlayground.Domain.Groups;
 
-namespace GroupsPlayground.Persistence.Mapping
+namespace GroupsPlayground.Persistence.Groups.Mapping
 {
     public class PermutationMapper
     {

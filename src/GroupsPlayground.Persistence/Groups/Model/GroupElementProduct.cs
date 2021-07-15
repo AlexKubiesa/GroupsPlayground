@@ -1,7 +1,7 @@
 ﻿using System;
-using GroupsPlayground.Domain.Framework;
+using Entity = GroupsPlayground.Persistence.Framework.Entity;
 
-namespace GroupsPlayground.Persistence.Model
+namespace GroupsPlayground.Persistence.Groups.Model
 {
     public class GroupElementProduct : Entity
     {

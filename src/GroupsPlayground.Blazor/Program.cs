@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GroupsPlayground.Persistence;
+using GroupsPlayground.Persistence.Groups;
 
 namespace GroupsPlayground.Blazor
 {

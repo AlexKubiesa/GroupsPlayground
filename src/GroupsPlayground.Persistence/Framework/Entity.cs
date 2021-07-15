@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GroupsPlayground.Persistence.Model
+namespace GroupsPlayground.Persistence.Framework
 {
     public abstract class Entity
     {

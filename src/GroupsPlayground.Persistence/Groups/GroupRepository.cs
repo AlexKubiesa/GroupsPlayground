@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GroupsPlayground.Domain;
 using GroupsPlayground.Domain.Groups;
-using GroupsPlayground.Persistence.Mapping;
-using Microsoft.EntityFrameworkCore;
+using GroupsPlayground.Persistence.Groups.Mapping;
 
-namespace GroupsPlayground.Persistence
+namespace GroupsPlayground.Persistence.Groups
 {
     public sealed class GroupRepository
     {

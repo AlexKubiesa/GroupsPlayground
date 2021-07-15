@@ -1,4 +1,4 @@
-﻿namespace GroupsPlayground.Persistence.Model
+﻿namespace GroupsPlayground.Persistence.Framework
 {
     public abstract class ValueObject<T>
         where T : ValueObject<T>

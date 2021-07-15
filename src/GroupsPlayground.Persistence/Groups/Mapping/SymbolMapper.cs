@@ -1,6 +1,6 @@
 ﻿using GroupsPlayground.Domain.Groups;
 
-namespace GroupsPlayground.Persistence.Mapping
+namespace GroupsPlayground.Persistence.Groups.Mapping
 {
     public static class SymbolMapper
     {
