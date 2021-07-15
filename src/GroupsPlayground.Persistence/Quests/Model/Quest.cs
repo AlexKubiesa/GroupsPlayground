@@ -10,5 +10,7 @@ namespace GroupsPlayground.Persistence.Quests.Model
         }
 
         public bool Complete { get; set; }
+
+        public string Description { get; set; }
     }
 }
