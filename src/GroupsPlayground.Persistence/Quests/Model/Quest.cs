@@ -1,7 +1,7 @@
 ﻿using System;
-using GroupsPlayground.Domain.Framework;
+using GroupsPlayground.Persistence.Framework;
 
-namespace GroupsPlayground.Domain.Quests
+namespace GroupsPlayground.Persistence.Quests.Model
 {
     public class Quest : Entity
     {

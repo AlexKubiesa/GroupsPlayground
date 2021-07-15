@@ -1,18 +1,15 @@
-﻿using GroupsPlayground.Persistence.Framework;
+﻿using GroupsPlayground.Persistence.Common;
+using GroupsPlayground.Persistence.Framework;
 using GroupsPlayground.Persistence.Groups.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroupsPlayground.Persistence.Groups
 {
-    internal sealed class GroupsPlaygroundContext : DbContext
+    internal sealed class GroupsDbContext : AppDbContext
     {
         public DbSet<Group> Groups { get; set; }
         public DbSet<CayleyTableGroup> CayleyTableGroups { get; set; }
         public DbSet<PermutationGroup> PermutationGroups { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseSqlServer(
-                @"Server=(LocalDb)\GroupsPlayground; Integrated Security=true; Database=GroupsPlayground; AttachDbFilename=C:\Temp\GroupsPlayground.mdf");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

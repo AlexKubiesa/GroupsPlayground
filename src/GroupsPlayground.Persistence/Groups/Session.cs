@@ -4,7 +4,7 @@ namespace GroupsPlayground.Persistence.Groups
 {
     public class Session : IDisposable
     {
-        private readonly GroupsPlaygroundContext context = new GroupsPlaygroundContext();
+        private readonly GroupsDbContext context = new GroupsDbContext();
 
         public Session()
         {

@@ -9,14 +9,15 @@ namespace GroupsPlayground.Persistence.Groups
 {
     public sealed class GroupRepository
     {
-        private readonly GroupsPlaygroundContext context;
+        private readonly GroupsDbContext context;
 
-        internal GroupRepository(GroupsPlaygroundContext context)
+        internal GroupRepository(GroupsDbContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Group GetGroup(Guid id) => GroupMapper.ToDomain(context.Groups.Find(id));
+        public Group GetGroup(Guid id) =>
+            GroupMapper.ToDomain(context.Groups.Find(id));
 
         public List<Group> GetAllGroups()
         {
