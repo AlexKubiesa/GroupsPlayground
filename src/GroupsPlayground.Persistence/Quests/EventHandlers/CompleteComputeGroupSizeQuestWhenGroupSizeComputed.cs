@@ -1,13 +1,13 @@
 ﻿using GroupsPlayground.Domain.Framework;
-using GroupsPlayground.Persistence.Groups;
+using GroupsPlayground.Domain.Groups;
 
 namespace GroupsPlayground.Persistence.Quests.EventHandlers
 {
-    public sealed class CompleteCreateGroupQuestWhenGroupAdded : IHandler<GroupAddedEvent>
+    public sealed class CompleteComputeGroupSizeQuestWhenGroupSizeComputed : IHandler<GroupSizeComputedEvent>
     {
-        public void Handle(GroupAddedEvent @event)
+        public void Handle(GroupSizeComputedEvent @event)
         {
-            var quest = QuestInstances.CreateGroupQuest;
+            var quest = QuestInstances.ComputeGroupSizeQuest;
 
             if (quest.Complete)
                 return;

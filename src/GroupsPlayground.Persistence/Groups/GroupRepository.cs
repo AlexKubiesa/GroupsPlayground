@@ -31,15 +31,21 @@ namespace GroupsPlayground.Persistence.Groups
         {
             context.Groups.Add(GroupMapper.ToPersistence(@group));
             DomainEvents.Raise(new GroupAddedEvent());
+            DomainEvents.DispatchEvents(group);
         }
 
         public async Task AddGroupAsync(Group group)
         {
             await context.Groups.AddAsync(GroupMapper.ToPersistence(group));
             DomainEvents.Raise(new GroupAddedEvent());
+            DomainEvents.DispatchEvents(group);
         }
 
-        public void UpdateGroup(Group group) => context.Groups.Update(GroupMapper.ToPersistence(group));
+        public void UpdateGroup(Group group)
+        {
+            context.Groups.Update(GroupMapper.ToPersistence(group));
+            DomainEvents.DispatchEvents(group);
+        }
 
         public void RemoveGroup(Group group) => context.Groups.Remove(context.Groups.Find(group.Id));
     }

@@ -1,6 +1,6 @@
 ﻿using GroupsPlayground.Domain.Framework;
 
-namespace GroupsPlayground.Domain.Groups
+namespace GroupsPlayground.Persistence.Groups
 {
     public class GroupAddedEvent : IDomainEvent
     {

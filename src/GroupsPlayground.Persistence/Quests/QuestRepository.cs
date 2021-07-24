@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Quests;
 using GroupsPlayground.Persistence.Common;
 using GroupsPlayground.Persistence.Quests.Mapping;
@@ -25,6 +26,10 @@ namespace GroupsPlayground.Persistence.Quests
             return quests.Select(QuestMapper.ToDomain).ToList();
         }
 
-        public void UpdateQuest(Quest quest) => context.Quests.Update(QuestMapper.ToPersistence(quest));
+        public void UpdateQuest(Quest quest)
+        {
+            context.Quests.Update(QuestMapper.ToPersistence(quest));
+            DomainEvents.DispatchEvents(quest);
+        }
     }
 }

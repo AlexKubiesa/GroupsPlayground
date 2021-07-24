@@ -40,6 +40,8 @@ namespace GroupsPlayground.Domain.Groups
             }
 
             Size = elements.Count;
+
+            AddDomainEvent(new GroupSizeComputedEvent());
         }
     }
 }

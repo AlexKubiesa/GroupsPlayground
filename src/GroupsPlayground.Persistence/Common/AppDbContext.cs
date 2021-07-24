@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Persistence.Framework;
 using GroupsPlayground.Persistence.Groups;
 using GroupsPlayground.Persistence.Groups.Model;

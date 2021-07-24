@@ -8,18 +8,12 @@ namespace GroupsPlayground.Domain.Framework
     public static class DomainEvents
     {
         private static readonly List<Type> StaticHandlers;
-        private static readonly Dictionary<Type, List<Delegate>> DynamicHandlers;
 
         static DomainEvents()
         {
             StaticHandlers = new List<Type>();
 
             Register(Assembly.GetExecutingAssembly());
-
-            DynamicHandlers = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(x => typeof(IDomainEvent).IsAssignableFrom(x) && !x.IsInterface)
-                .ToDictionary(x => x, x => new List<Delegate>());
         }
 
         public static void Register(Assembly assembly)
@@ -29,25 +23,39 @@ namespace GroupsPlayground.Domain.Framework
                     .Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IHandler<>))));
         }
 
-        public static void Register<T>(Action<T> eventHandler)
-            where T : IDomainEvent
-        {
-            DynamicHandlers[typeof(T)].Add(eventHandler);
-        }
-
         public static void Raise<T>(T @event)
             where T : IDomainEvent
         {
-            foreach (var handler in DynamicHandlers[@event.GetType()])
-            {
-                var action = (Action<T>)handler;
-                action(@event);
-            }
-
             foreach (var type in StaticHandlers.Where(typeof(IHandler<T>).IsAssignableFrom))
             {
                 var handler = (IHandler<T>)Activator.CreateInstance(type);
                 handler.Handle(@event);
+            }
+        }
+
+        public static void DispatchEvents(AggregateRoot aggregateRoot)
+        {
+            foreach (var @event in aggregateRoot.DomainEvents)
+            {
+                Dispatch(@event);
+            }
+
+            aggregateRoot.ClearDomainEvents();
+        }
+
+        private static void Dispatch(IDomainEvent @event)
+        {
+            foreach (object handler in
+                from type in StaticHandlers
+                let canHandleEvent =
+                    type.GetInterfaces()
+                    .Any(x => x.IsGenericType
+                              && x.GetGenericTypeDefinition() == typeof(IHandler<>)
+                              && x.GenericTypeArguments[0] == @event.GetType())
+                where canHandleEvent
+                select Activator.CreateInstance(type))
+            {
+                ((dynamic) handler).Handle((dynamic) @event);
             }
         }
     }
