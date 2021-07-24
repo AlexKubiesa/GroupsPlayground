@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain.Groups
 {
-    public sealed class Cycle : ValueObject<Cycle>
+    public sealed class Cycle : ValueObject<Cycle>, IEnumerable<int>
     {
         private readonly ValueList<int> elements;
 
@@ -29,5 +30,9 @@ namespace GroupsPlayground.Domain.Groups
         protected override int GetHashCodeInternal() => elements.GetHashCode();
 
         public override string ToString() => string.Join(',', elements.Select(x => x.ToString()));
+
+        public IEnumerator<int> GetEnumerator() => elements.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Antlr4.Runtime;
@@ -31,9 +32,18 @@ namespace GroupsPlayground.Domain.Groups
             return PermutationEvaluator.Evaluate(context);
         }
 
+        private static bool ArePairwiseDisjoint(IEnumerable<Cycle> cycles)
+        {
+            var elements = new HashSet<int>();
+            return cycles.All(cycle => cycle.All(elements.Add));
+        }
+
         public Permutation(ValueList<Cycle> cycles)
         {
             this.cycles = cycles ?? throw new ArgumentNullException(nameof(cycles));
+
+            if (!ArePairwiseDisjoint(cycles))
+                throw new ArgumentException("Cycles must be pairwise disjoint.", nameof(cycles));
         }
 
         protected override bool EqualsInternal(Permutation other) => cycles.Equals(other.cycles);
