@@ -1,9 +1,11 @@
-﻿using GroupsPlayground.Persistence.Framework;
+﻿using System.Collections.Generic;
+using GroupsPlayground.Persistence.Framework;
 using GroupsPlayground.Persistence.Groups;
 using GroupsPlayground.Persistence.Groups.Model;
 using GroupsPlayground.Persistence.Quests;
 using GroupsPlayground.Persistence.Quests.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GroupsPlayground.Persistence.Common
 {
@@ -45,11 +47,7 @@ namespace GroupsPlayground.Persistence.Common
             modelBuilder.Entity<GroupElementProduct>().HasOne(x => x.Product).WithMany();
 
             modelBuilder.Entity<PermutationGroup>().Property(x => x.Size);
-            modelBuilder.Entity<PermutationGroup>().HasMany(x => x.Generators).WithOne();
-            modelBuilder.Entity<PermutationGroup>().Navigation(x => x.Generators).AutoInclude();
-
-            modelBuilder.Entity<Permutation>().HasKey(x => x.Id);
-            modelBuilder.Entity<Permutation>().Property(x => x.Expression);
+            modelBuilder.Entity<PermutationGroup>().Property(x => x.Generators).HasJsonConversion();
 
             modelBuilder.Entity<Quest>().HasKey(x => x.Id);
             modelBuilder.Entity<Quest>().Property(x => x.Complete);

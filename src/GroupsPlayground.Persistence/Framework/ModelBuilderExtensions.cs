@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 
 namespace GroupsPlayground.Persistence.Framework
 {
@@ -28,6 +31,21 @@ namespace GroupsPlayground.Persistence.Framework
             }
 
             return modelBuilder;
+        }
+
+        public static PropertyBuilder<T> HasJsonConversion<T>(this PropertyBuilder<T> propertyBuilder) where T : class
+        {
+            ValueConverter<T, string> converter = new ValueConverter<T, string>
+            (
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<T>(v)
+            );
+
+            propertyBuilder.HasConversion(converter);
+            propertyBuilder.Metadata.SetValueConverter(converter);
+            propertyBuilder.HasColumnType("nvarchar(max)");
+
+            return propertyBuilder;
         }
     }
 }

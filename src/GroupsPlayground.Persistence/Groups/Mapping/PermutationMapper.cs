@@ -10,6 +10,6 @@ namespace GroupsPlayground.Persistence.Groups.Mapping
             DomainModel.Permutation.Parse(permutation.Expression);
 
         public static PersistenceModel.Permutation ToPersistence(DomainModel.Permutation permutation) =>
-            new PersistenceModel.Permutation(Guid.NewGuid(), permutation.ToString());
+            new PersistenceModel.Permutation(permutation.ToString());
     }
 }
