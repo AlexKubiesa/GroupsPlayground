@@ -6,7 +6,7 @@ using GroupsPlayground.Domain.Framework;
 
 namespace GroupsPlayground.Domain.Groups
 {
-    public sealed class Cycle : ValueObject<Cycle>, IEnumerable<int>
+    public sealed class Cycle : ValueObject<Cycle>, IReadOnlyList<int>
     {
         private readonly ValueList<int> elements;
 
@@ -25,14 +25,29 @@ namespace GroupsPlayground.Domain.Groups
             this.elements = elements.ToValueList();
         }
 
+        public int Count => elements.Count;
+
         protected override bool EqualsInternal(Cycle other) => elements.Equals(other.elements);
 
         protected override int GetHashCodeInternal() => elements.GetHashCode();
 
-        public override string ToString() => string.Join(',', elements.Select(x => x.ToString()));
+        public override string ToString() => '(' + string.Join(',', elements.Select(x => x.ToString())) + ')';
 
         public IEnumerator<int> GetEnumerator() => elements.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public int this[int index] => elements[index];
+
+        public int Map(int element)
+        {
+            int index = this.IndexOf(element);
+
+            if (index < 0)
+                return element;
+
+            int nextIndex = (index + 1) % Count;
+            return this[nextIndex];
+        }
     }
 }
