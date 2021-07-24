@@ -27,6 +27,8 @@ namespace GroupsPlayground.Blazor
                 session.SaveChanges();
             }
 
+            Persistence.DomainEventSubscription.Initialise();
+
             CreateHostBuilder(args).Build().Run();
         }
 

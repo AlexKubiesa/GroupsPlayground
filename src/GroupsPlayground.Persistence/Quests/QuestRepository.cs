@@ -24,5 +24,7 @@ namespace GroupsPlayground.Persistence.Quests
             var quests = context.Quests.ToList();
             return quests.Select(QuestMapper.ToDomain).ToList();
         }
+
+        public void UpdateQuest(Quest quest) => context.Quests.Update(QuestMapper.ToPersistence(quest));
     }
 }

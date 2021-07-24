@@ -8,7 +8,7 @@
     @foreach (var quest in quests)
     {
         <li>
-            <input type="checkbox" value="@quest.Complete" disabled/>
+            <input type="checkbox" checked="@quest.Complete" disabled="disabled"/>
             @quest.Description
         </li>
     }
