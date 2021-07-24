@@ -13,6 +13,10 @@
     <div>
         <h2>Size</h2>
         <p>@group.Size</p>
+        @if (!group.Size.HasValue)
+        {
+            <button class="btn btn-primary" @onclick="@ComputeGroupSize">Compute</button>
+        }
     </div>
     <div>
         <h2>Elements</h2>
@@ -47,5 +51,13 @@
         using GroupsSession session = new();
         group = session.GroupRepository.GetGroup(id);
         elements = (@group as CayleyTableGroup)?.Elements;
+    }
+
+    private void ComputeGroupSize()
+    {
+        group.ComputeSize();
+        using GroupsSession session = new();
+        session.GroupRepository.UpdateGroup(group);
+        session.SaveChanges();
     }
 }

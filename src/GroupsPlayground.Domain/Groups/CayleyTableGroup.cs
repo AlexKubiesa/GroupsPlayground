@@ -35,9 +35,9 @@ namespace GroupsPlayground.Domain.Groups
                         elements.Single(x => x.Symbol.Equals(cayleyTable.Products[firstIndex][secondIndex]));
                 }
             }
-        }
 
-        public override int? Size => Elements.Count;
+            Size = elements.Count;
+        }
 
         public IReadOnlyList<IGroupElement> Elements => elements;
 

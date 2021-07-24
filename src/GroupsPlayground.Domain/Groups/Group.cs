@@ -32,7 +32,7 @@ namespace GroupsPlayground.Domain.Groups
             }
         }
 
-        public abstract int? Size { get; }
+        public int? Size { get; protected set; }
 
         public virtual void ComputeSize()
         {

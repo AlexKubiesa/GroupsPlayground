@@ -39,6 +39,8 @@ namespace GroupsPlayground.Persistence.Groups
             DomainEvents.Raise(new GroupAddedEvent());
         }
 
+        public void UpdateGroup(Group group) => context.Groups.Update(GroupMapper.ToPersistence(group));
+
         public void RemoveGroup(Group group) => context.Groups.Remove(context.Groups.Find(group.Id));
     }
 }
