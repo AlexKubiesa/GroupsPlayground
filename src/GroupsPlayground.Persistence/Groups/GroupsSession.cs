@@ -1,21 +1,16 @@
 ﻿using System;
 using GroupsPlayground.Persistence.Common;
+using GroupsPlayground.Persistence.Framework;
 
 namespace GroupsPlayground.Persistence.Groups
 {
-    public class GroupsSession : IDisposable
+    public class GroupsSession : AppSession
     {
-        private readonly AppDbContext context = new AppDbContext();
-
         public GroupsSession()
         {
-            GroupRepository = new GroupRepository(context);
+            AddRepository(GroupRepository = new GroupRepository(Context));
         }
 
         public GroupRepository GroupRepository { get; }
-
-        public void Dispose() => context?.Dispose();
-
-        public void SaveChanges() => context.SaveChanges();
     }
 }

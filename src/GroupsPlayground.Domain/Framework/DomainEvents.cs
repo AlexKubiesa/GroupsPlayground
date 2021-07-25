@@ -23,16 +23,6 @@ namespace GroupsPlayground.Domain.Framework
                     .Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IHandler<>))));
         }
 
-        public static void Raise<T>(T @event)
-            where T : IDomainEvent
-        {
-            foreach (var type in StaticHandlers.Where(typeof(IHandler<T>).IsAssignableFrom))
-            {
-                var handler = (IHandler<T>)Activator.CreateInstance(type);
-                handler.Handle(@event);
-            }
-        }
-
         public static void DispatchEvents(AggregateRoot aggregateRoot)
         {
             foreach (var @event in aggregateRoot.DomainEvents)
@@ -43,7 +33,13 @@ namespace GroupsPlayground.Domain.Framework
             aggregateRoot.ClearDomainEvents();
         }
 
-        private static void Dispatch(IDomainEvent @event)
+        public static void Dispatch(IEnumerable<IDomainEvent> @events)
+        {
+            foreach (var @event in events)
+                Dispatch(@event);
+        }
+
+        public static void Dispatch(IDomainEvent @event)
         {
             foreach (object handler in
                 from type in StaticHandlers

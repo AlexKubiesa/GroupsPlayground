@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Groups;
 using GroupsPlayground.Persistence.Common;
+using GroupsPlayground.Persistence.Framework;
 using GroupsPlayground.Persistence.Groups.Mapping;
 
 namespace GroupsPlayground.Persistence.Groups
 {
-    public sealed class GroupRepository
+    public sealed class GroupRepository : Repository
     {
         private readonly AppDbContext context;
 
@@ -30,23 +30,27 @@ namespace GroupsPlayground.Persistence.Groups
         public void AddGroup(Group group)
         {
             context.Groups.Add(GroupMapper.ToPersistence(@group));
-            DomainEvents.Raise(new GroupAddedEvent());
-            DomainEvents.DispatchEvents(group);
+            OnAggregateAdded(group);
+            OnDomainEventRaised(new GroupAddedEvent());
         }
 
         public async Task AddGroupAsync(Group group)
         {
             await context.Groups.AddAsync(GroupMapper.ToPersistence(group));
-            DomainEvents.Raise(new GroupAddedEvent());
-            DomainEvents.DispatchEvents(group);
+            OnAggregateAdded(group);
+            OnDomainEventRaised(new GroupAddedEvent());
         }
 
         public void UpdateGroup(Group group)
         {
             context.Groups.Update(GroupMapper.ToPersistence(group));
-            DomainEvents.DispatchEvents(group);
+            OnAggregateUpdated(group);
         }
 
-        public void RemoveGroup(Group group) => context.Groups.Remove(context.Groups.Find(group.Id));
+        public void RemoveGroup(Group group)
+        {
+            context.Groups.Remove(context.Groups.Find(group.Id));
+            OnAggregateRemoved(group);
+        }
     }
 }

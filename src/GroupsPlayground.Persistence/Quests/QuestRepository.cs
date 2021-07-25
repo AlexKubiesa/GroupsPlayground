@@ -4,11 +4,12 @@ using System.Linq;
 using GroupsPlayground.Domain.Framework;
 using GroupsPlayground.Domain.Quests;
 using GroupsPlayground.Persistence.Common;
+using GroupsPlayground.Persistence.Framework;
 using GroupsPlayground.Persistence.Quests.Mapping;
 
 namespace GroupsPlayground.Persistence.Quests
 {
-    public sealed class QuestRepository
+    public sealed class QuestRepository : Repository
     {
         private readonly AppDbContext context;
 
@@ -29,7 +30,7 @@ namespace GroupsPlayground.Persistence.Quests
         public void UpdateQuest(Quest quest)
         {
             context.Quests.Update(QuestMapper.ToPersistence(quest));
-            DomainEvents.DispatchEvents(quest);
+            OnAggregateUpdated(quest);
         }
     }
 }
